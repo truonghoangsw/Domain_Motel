@@ -1,6 +1,8 @@
 ﻿using LinqToDB;
 using LinqToDB.Data;
+using LinqToDB.Mapping;
 using Motel.Core;
+using Motel.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -131,7 +133,7 @@ namespace Motel.Domain.ContextDataBase
         /// </summary>
         /// <param name="nopConnectionString">Connection string info</param>
         /// <returns>Connection string</returns>
-        string BuildConnectionString(INopConnectionStringInfo nopConnectionString);
+        string BuildConnectionString(IMotelConnectionStringInfo nopConnectionString);
 
         /// <summary>
         /// Set table identity (is supported)

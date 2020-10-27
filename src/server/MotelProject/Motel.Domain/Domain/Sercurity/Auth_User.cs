@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Motel.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Motel.Domain.Domain.Auth
 {
-    public class Auth_User
+    public class Auth_User:BaseEntity
 	{
-		public int UserID {get;set;}
 		public string UserName {get;set;}
 		public string NormalizedUserName {get;set;}
 		public string Email {get;set;}

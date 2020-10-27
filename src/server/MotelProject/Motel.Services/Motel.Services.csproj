@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Authentication\" />
-    <Folder Include="Log\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
     <ProjectReference Include="..\Motel.Domain\Motel.Domain.csproj" />
   </ItemGroup>

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Motel.Core.Domain.UserAccess
+namespace Motel.Services.Authentication
 {
-    public class User
+    public interface IAuthenticationService
     {
-
     }
 }

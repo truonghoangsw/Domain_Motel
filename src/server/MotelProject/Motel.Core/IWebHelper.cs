@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Motel.Core
 {
-      public partial interface IWebHelper
+    public partial interface IWebHelper
     {
         /// <summary>
         /// Get URL referrer if exists

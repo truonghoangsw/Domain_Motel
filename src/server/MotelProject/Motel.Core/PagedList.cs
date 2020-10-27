@@ -70,6 +70,17 @@ namespace Motel.Core
         }
 
         /// <summary>
+        /// Ctor default
+        /// </summary>
+        /// <param name="source">source</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="totalCount">Total count</param>
+        public PagedList()
+        {
+            AddRange(new List<T>());
+        }
+        /// <summary>
         /// Page index
         /// </summary>
         public int PageIndex { get; }

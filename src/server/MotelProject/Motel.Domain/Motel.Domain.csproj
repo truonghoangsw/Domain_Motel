@@ -15,8 +15,4 @@
     <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Domain\Lester\" />
-  </ItemGroup>
-
 </Project>

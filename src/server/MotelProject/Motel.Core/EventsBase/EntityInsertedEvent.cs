@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Motel.Core.EventsBase
 {
-    public class EntityCreatedEvent<T> where T: BaseEntity
+    public class EntityInsertedEvent<T> where T: BaseEntity
     {
         public T Entity { get; set; }
-        public EntityCreatedEvent(T entity)
+        public EntityInsertedEvent(T entity)
         {
             Entity = entity;
         }

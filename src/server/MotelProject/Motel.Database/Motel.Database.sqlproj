@@ -72,5 +72,6 @@
     <Build Include="Auth\Auth_Assign.sql" />
     <Build Include="Auth\Auth_ActionLog.sql" />
     <Build Include="Auth\Auth_UsersLog.sql" />
+    <Build Include="Auth\Auth_UserToken.sql" />
   </ItemGroup>
 </Project>

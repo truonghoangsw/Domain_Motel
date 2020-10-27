@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Motel.Domain.Domain.Logging
+﻿namespace Motel.Domain.Domain.Logging
 {
     public enum LogLevel
     {

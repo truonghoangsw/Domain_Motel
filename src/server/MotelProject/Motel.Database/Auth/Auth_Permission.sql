@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Auth].[Auth_Permission]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[Permission] [nvarchar](50) NOT NULL,
 	[Name] [nvarchar](512) NULL,
 	[Status] [tinyint] NOT NULL,

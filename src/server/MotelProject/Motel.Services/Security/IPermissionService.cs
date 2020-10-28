@@ -60,7 +60,7 @@ namespace Motel.Services.Security
         /// <param name="permission">Permission record</param>
         /// <param name="customer">Customer</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        bool Authorize(Auth_Permission permission, Auth_Permission customer);
+        bool Authorize(Auth_Permission permission, Auth_User customer);
 
         /// <summary>
         /// Authorize permission

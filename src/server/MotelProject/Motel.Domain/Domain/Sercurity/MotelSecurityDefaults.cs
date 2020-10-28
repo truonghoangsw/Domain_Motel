@@ -11,6 +11,8 @@ namespace Motel.Domain.Domain.Sercurity
         public static string PermissionsAllByCustomerRoleIdPrefixCacheKey => "Motel.permission.allbycustomerroleid";
 
         public static string PermissionsAllowedPrefixCacheKey => "Motel.permission.allowed-{0}";
+        public static CacheKey PermissionsAllByCustomerRoleIdCacheKey => new CacheKey("Motel.permission.allbycustomerroleid-{0}", PermissionsAllByCustomerRoleIdPrefixCacheKey);
+
 
     }
 }

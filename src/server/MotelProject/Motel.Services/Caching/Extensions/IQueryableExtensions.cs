@@ -1,9 +1,7 @@
-﻿using Motel.Core.Caching;
-using Motel.Core.Infrastructure;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Motel.Core.Caching;
+using Motel.Core.Infrastructure;
 
 namespace Motel.Services.Caching.Extensions
 {

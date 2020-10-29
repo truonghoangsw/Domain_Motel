@@ -233,7 +233,7 @@ namespace Motel.Core
                 return sourceConverter.ConvertTo(null, culture, value, destinationType);
 
             if (destinationType.IsEnum && value is int)
-                return Enum.ToObject(destinationType, (int)value);
+                return System.Enum.ToObject(destinationType, (int)value);
 
             if (!destinationType.IsInstanceOfType(value))
                 return Convert.ChangeType(value, destinationType, culture);

@@ -97,7 +97,7 @@ namespace Motel.Services.Security
             if (string.IsNullOrEmpty(auth_PermissionSystemName))
                 return false;
 
-            var userRoles = _userService.GetCustomerRoles(customer);
+            var userRoles = _userService.GetUserRoles(customer);
              foreach (var role in userRoles)
                 if (Authorize(auth_PermissionSystemName, role.Id))
                     return true;

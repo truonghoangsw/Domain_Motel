@@ -26,7 +26,7 @@ namespace Motel.Domain.Domain.Auth
 		public DateTime CreatedTime {get;set;}
 		public int UpdatedBy {get;set;}
 		public DateTime UpdatedTime {get;set;}
-		public byte Status {get;set;}
+		public int Status {get;set;}
 		public string Avatar {get;set;}
 		public byte Deleted {get;set;}
 

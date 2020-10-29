@@ -89,9 +89,49 @@ namespace Motel.Services.Security
                 return null;
             }
         }
+
+        public Auth_User GetUserByUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                return null;
+            try
+            {
+                var query = from c in _userRepository.Table
+                            orderby c.Id
+                            where c.UserName == username
+                            select c;
+                var customer = query.FirstOrDefault();
+                return customer;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("GetUserByUsername error", ex);
+                return null;
+            }
+        }
+
+        public Auth_User GetUserByEmail(string email)
+        {
+             if (string.IsNullOrWhiteSpace(email))
+                return null;
+            try
+            {
+                var query = from c in _userRepository.Table
+                        orderby c.Id
+                        where c.Email == email
+                        select c;
+                 var customer = query.FirstOrDefault();
+                return customer;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("GetUserByUsername error",ex);
+                return null;
+            }
+        }
         #endregion
 
-        public IList<Auth_Roles> GetCustomerRoles(Auth_User user, bool showHidden = false)
+        public IList<Auth_Roles> GetUserRoles(Auth_User user, bool showHidden = false)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
@@ -113,6 +153,6 @@ namespace Motel.Services.Security
             }
         }
 
-     
+      
     }
 }

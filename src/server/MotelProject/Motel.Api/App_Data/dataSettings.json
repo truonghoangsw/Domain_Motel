@@ -1,5 +1,5 @@
 ﻿{
-  "DataConnectionString": "Data Source=MSI\\TRUONGHD;Initial Catalog=nopcom;Integrated Security=True;Persist Security Info=False",
+  "DataConnectionString": "Data Source=(localdb)\\ProjectsV13;Initial Catalog=Motel.Database;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False",
   "DataProvider": "sqlserver",
   "SQLCommandTimeout": null,
   "RawDataSettings": {}

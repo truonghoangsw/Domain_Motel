@@ -10,10 +10,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
+    <ProjectReference Include="..\Motel.Services\Motel.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Infrastructure\Cache\" />
   </ItemGroup>
 
 

@@ -7,6 +7,6 @@ namespace Motel.Services.Sercurity
 {
     public partial class UserSettings:ISettings
     {
-        
+         public bool UsernamesEnabled { get; set; }
     }
 }

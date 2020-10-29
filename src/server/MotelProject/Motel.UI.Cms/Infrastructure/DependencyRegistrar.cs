@@ -5,16 +5,13 @@ using Motel.Core.Infrastructure.DependencyManagement;
 using Motel.Domain.ContextDataBase;
 using Motel.Services.Authentication;
 using Motel.Services.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Motel.Api.Infrastructure
+
+namespace Motel.UI.Cms.Infrastructure
 {
-    public class DependencyRegistrar : IDependencyRegistrar
+    public class DependencyRegistrar:IDependencyRegistrar
     {
-        public int Order => 2;
+         public int Order => 2;
 
         public void Register(ContainerBuilder builder, ITypeFinder typeFinder, MotelConfig config)
         {

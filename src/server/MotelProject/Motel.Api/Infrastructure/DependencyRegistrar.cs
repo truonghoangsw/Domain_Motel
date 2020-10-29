@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using Microsoft.AspNetCore.Authentication;
 using Motel.Core.Configuration;
 using Motel.Core.Infrastructure;
 using Motel.Core.Infrastructure.DependencyManagement;
+using Motel.Domain.ContextDataBase;
 using Motel.Services.Authentication;
 using Motel.Services.Security;
 using System;
@@ -19,7 +19,8 @@ namespace Motel.Api.Infrastructure
         public void Register(ContainerBuilder builder, ITypeFinder typeFinder, MotelConfig config)
         {
             builder.RegisterType<IUserService>().As<UserService>().InstancePerLifetimeScope();
-           // builder.RegisterType<IAuthenticationService>().As<CookieAuthenticationService>().InstancePerLifetimeScope();
+            builder.RegisterType<IAuthenticationService>().As<CookieAuthenticationService>().InstancePerLifetimeScope();
+            builder.RegisterType<DataProviderManager>().As<IDataProviderManager>().InstancePerDependency();
 
         }
     }

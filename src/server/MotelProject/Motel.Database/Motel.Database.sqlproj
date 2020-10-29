@@ -62,6 +62,7 @@
     <Folder Include="Lesters" />
     <Folder Include="Post" />
     <Folder Include="Payment" />
+    <Folder Include="Territories" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Auth\Auth_User.sql" />
@@ -73,5 +74,8 @@
     <Build Include="Auth\Auth_ActionLog.sql" />
     <Build Include="Auth\Auth_UsersLog.sql" />
     <Build Include="Auth\Auth_UserToken.sql" />
+    <Build Include="Retener\Retener.sql" />
+    <Build Include="Territories\Territories.sql" />
+    <Build Include="Lesters\Lesters.sql" />
   </ItemGroup>
 </Project>

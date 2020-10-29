@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Motel.Core.Infrastructure
 {
-    public class IMotelConnectionStringInfo
+    public interface IMotelConnectionStringInfo
     {
-         /// <summary>
+       /// <summary>
         /// DatabaseName
         /// </summary>
         string DatabaseName { get; set; }

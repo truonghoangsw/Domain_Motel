@@ -87,7 +87,7 @@ namespace Motel.Domain
 
         #endregion
 
-          #region Methods
+        #region Methods
 
         /// <summary>
         /// Creates a connection to a database

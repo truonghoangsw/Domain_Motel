@@ -23,10 +23,6 @@ namespace Motel.Domain.ContextDataBase
         /// <returns>Connection to a database</returns>
         IDbConnection CreateDbConnection(string connectionString);
 
-        /// <summary>
-        /// Initialize database
-        /// </summary>
-        void InitializeDatabase();
 
         /// <summary>
         /// Insert a new entity

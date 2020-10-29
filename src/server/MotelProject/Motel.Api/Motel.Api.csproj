@@ -9,5 +9,10 @@
     <ProjectReference Include="..\Motel.Services\Motel.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+
 
 </Project>

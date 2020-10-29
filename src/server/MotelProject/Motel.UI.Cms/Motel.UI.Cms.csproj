@@ -8,5 +8,9 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
+  </ItemGroup>
+
 
 </Project>

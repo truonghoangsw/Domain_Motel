@@ -4,5 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
+    <ProjectReference Include="..\Motel.Services\Motel.Services.csproj" />
+  </ItemGroup>
+
 
 </Project>

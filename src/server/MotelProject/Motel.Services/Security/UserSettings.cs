@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Motel.Domain.Domain.Sercurity
+namespace Motel.Services.Sercurity
 {
     public partial class UserSettings:ISettings
     {
-
+        
     }
 }

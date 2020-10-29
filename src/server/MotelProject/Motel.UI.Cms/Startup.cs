@@ -10,14 +10,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Motel.Core.Configuration;
+using Motel.Core.Infrastructure;
 
 namespace Motel.UI.Cms
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+         #region Fields
+
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private IEngine _engine;
+        private MotelConfig _motelConfig;
+
+        #endregion
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
-            Configuration = configuration;
+           _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }

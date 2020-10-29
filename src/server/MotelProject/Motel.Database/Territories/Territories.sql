@@ -12,5 +12,10 @@
 	[CreatedTime] [datetime] NULL,
 	[UpdatedBy] [int] NULL,
 	[UpdatedTime] [datetime] NULL,
-	[Deleted] [tinyint] NOT NULL
+	[Deleted] [tinyint] NOT NULL, 
+    [ProvincialId] INT NULL, 
+    [DistrictId] INT NULL, 
+    [WardId] INT NULL, 
+    [AddressDetail] NVARCHAR(MAX) NULL, 
+    [NumberRoom] NCHAR(10) NULL
 )

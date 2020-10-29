@@ -10,14 +10,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Motel.Core.Configuration;
+using Motel.Core.Infrastructure;
 
 namespace Motel.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        #region Fields
+
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private IEngine _engine;
+        private MotelConfig _nopConfig;
+
+        #endregion
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
-            Configuration = configuration;
+            _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -25,6 +36,7 @@ namespace Motel.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            (_engine, _nopConfig) = services.ConfigureApplicationServices(_configuration, _webHostEnvironment);
             services.AddControllers();
         }
 

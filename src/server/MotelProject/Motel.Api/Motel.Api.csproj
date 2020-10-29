@@ -13,6 +13,7 @@
     <Folder Include="Controllers\" />
     <Folder Include="App_Data\" />
     <Folder Include="Infrastructure\Cache\" />
+    <Folder Include="Infrastructure\Extensions\" />
   </ItemGroup>
 
 

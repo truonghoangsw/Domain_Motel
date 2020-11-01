@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Motel.Domain.Domain.Download
+namespace Motel.Domain.Domain.Media
 {
       public partial class Download : BaseEntity
     {

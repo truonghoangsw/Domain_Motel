@@ -16,8 +16,18 @@
     [TerritoriesId] INT NULL, 
     [LesterId] INT NULL, 
     [Tag] VARCHAR(10) NULL, 
+    [PackageTypePostId] INT NULL, 
+    [ExpirationDate] DATETIME NULL, 
+    [RenewalDate] DATETIME NULL, 
+    [TypeGendeRroom] TINYINT NULL, 
+    [ElectricityBill] INT NULL, 
+    [WaterBill] INT NULL, 
+    [MotelTypeId] INT NULL, 
+    [InternetMoney] INT NULL, 
+    [ServiceFee] INT NULL, 
     CONSTRAINT [FK_Post_Territories] FOREIGN KEY (TerritoriesId) REFERENCES Territories(Id),
     CONSTRAINT [FK_Post_Lesters] FOREIGN KEY (LesterId) REFERENCES Lesters(Id),
+    CONSTRAINT [FK_Post_PackageTypePost] FOREIGN KEY (PackageTypePostId) REFERENCES PackageTypePost(Id)
 )
 
 GO

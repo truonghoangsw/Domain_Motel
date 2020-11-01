@@ -88,6 +88,9 @@
     <Build Include="Media\Picture.sql" />
     <Build Include="Post\PostRental_Picture_Mapping.sql" />
     <Build Include="Media\PictureBinary.sql" />
+    <Build Include="Post\PostTagMapping.sql" />
+    <Build Include="Post\Category.sql" />
+    <Build Include="Post\RentalPost_Category_Mapping.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Motel.Database.refactorlog" />

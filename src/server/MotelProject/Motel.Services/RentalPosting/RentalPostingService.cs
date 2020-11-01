@@ -1,10 +1,12 @@
 ﻿using Motel.Core;
 using Motel.Core.Caching;
 using Motel.Domain.ContextDataBase;
+using Motel.Domain.Domain.Media;
 using Motel.Domain.Domain.Post;
 using Motel.Services.Caching;
 using Motel.Services.Events;
 using Motel.Services.Logging;
+using Motel.Services.Media;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,14 +20,14 @@ namespace Motel.Services.RentalPosting
         private readonly ICacheKeyService _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<PostComment> _postCommentRepository;
-        private readonly IRepository<PostImage> _postImageRepository;
+        private readonly IPictureService _pictureService;
         private readonly ILogger _logger;
         private readonly IRepository<RentalPost> _rentalPostRepository;
         private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
         #region Ctor
-        public RentalPostingService(ICacheKeyService cacheKeyService,IEventPublisher eventPublisher, IRepository<PostImage> postImageRepository,
+        public RentalPostingService(ICacheKeyService cacheKeyService,IEventPublisher eventPublisher, IPictureService pictureService,
             IRepository<PostComment> postCommentRepository, IRepository<RentalPost> rentalPostRepository,IStaticCacheManager staticCacheManager,ILogger logger)
         {
             _logger = logger;
@@ -34,7 +36,7 @@ namespace Motel.Services.RentalPosting
             _postCommentRepository = postCommentRepository;
             _rentalPostRepository = rentalPostRepository;
             _staticCacheManager = staticCacheManager;
-            _postImageRepository = postImageRepository;
+            _pictureService = pictureService;
         }
         #endregion
        

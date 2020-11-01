@@ -14,7 +14,7 @@ namespace Motel.Domain.ContextDataBase.MappingData
 {
     public class FluentMigratorMetadataReader : IMetadataReader
     {
-         #region Fields
+        #region Fields
 
         private readonly IMigrationManager _migrationManager;
 

@@ -1,14 +1,12 @@
 ﻿using Motel.Domain.ContextDataBase;
-using Motel.Domain.Domain.Download;
 using Motel.Services.Events;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 using System;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Motel.Domain.Domain.Media;
 
-namespace Motel.Services.RentalPosting.ImageServices
+namespace Motel.Services.Media
 {
     public partial class DownloadService : IDownloadService
     {

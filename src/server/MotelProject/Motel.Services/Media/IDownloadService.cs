@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Motel.Domain.Domain.Download;
+using Motel.Domain.Domain.Media;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Motel.Services.RentalPosting.ImageServices
+namespace Motel.Services.Media
 {
     public interface  IDownloadService
     {

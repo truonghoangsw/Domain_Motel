@@ -77,4 +77,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[FK_PostRental_Picture_Mapping_Picture]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="d8758996-a4bd-47ef-b503-deb4b57a8c67" ChangeDateTime="11/01/2020 08:42:58">
+    <Property Name="ElementName" Value="[dbo].[RentalPost_TagMapping].[RentalPost_Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RentalPost_TagMapping]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RentalPostId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ab63f27b-5cf6-4906-8da5-00d495fc90b4" ChangeDateTime="11/01/2020 08:43:04">
+    <Property Name="ElementName" Value="[dbo].[RentalPost_TagMapping].[PostTag_Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RentalPost_TagMapping]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PostTagId" />
+  </Operation>
 </Operations>

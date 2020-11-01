@@ -153,6 +153,10 @@ namespace Motel.Services.Security
             }
         }
 
-      
+        public void UpdateCustomerPassword(UserPassword UserPassword)
+        {
+            if (UserPassword == null)
+                throw new ArgumentNullException(nameof(UserPassword));
+        }
     }
 }

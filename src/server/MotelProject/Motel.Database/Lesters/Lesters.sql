@@ -17,6 +17,8 @@
 	[IdentityDay] [date] NULL,
 	[StatusId] [tinyint] NULL,
 	[UserId] [int] Not Null, 
-    CONSTRAINT [FK_Lesters_Auth_User] FOREIGN KEY (UserId) REFERENCES [Auth].[Auth_User]([Id])
+    [TerritoriesId] INT NULL, 
+    CONSTRAINT [FK_Lesters_Auth_User] FOREIGN KEY (UserId) REFERENCES [Auth].[Auth_User]([Id]),
+	CONSTRAINT [FK_Lesters_Territories] FOREIGN KEY (TerritoriesId) REFERENCES [Territories]([Id])
 )
 

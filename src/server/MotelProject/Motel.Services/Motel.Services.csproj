@@ -9,4 +9,8 @@
     <ProjectReference Include="..\Motel.Domain\Motel.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Retener\" />
+  </ItemGroup>
+
 </Project>

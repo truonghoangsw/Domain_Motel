@@ -65,32 +65,6 @@ namespace Motel.Core.Redis
             return _config.RedisConnectionString;
         }
         #endregion
-
-        #region Method
-
-        #endregion
-
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing)
-            {
-                //dispose ConnectionMultiplexer
-                _connection?.Dispose();
-
-                //dispose RedLock factory
-                _redisLockFactory?.Dispose();
-            }
-            _disposed = true;
-        }
         public void FlushDatabase(RedisDatabaseNumber db)
         {
             var endPoints = GetEndPoints();
@@ -127,5 +101,31 @@ namespace Motel.Core.Redis
             return GetConnection().GetServer(endPoint);
         }
 
+        #region Method
+
+        #endregion
+
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                //dispose ConnectionMultiplexer
+                _connection?.Dispose();
+
+                //dispose RedLock factory
+                _redisLockFactory?.Dispose();
+            }
+            _disposed = true;
+        }
+       
     }
 }

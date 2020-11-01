@@ -17,5 +17,7 @@
 	[IdentityDay] [date] NULL,
 	[StatusId] [tinyint] NULL,
 	[UserId] [int] Not Null, 
-    CONSTRAINT [FK_Retener_Auth_User] FOREIGN KEY (UserId) REFERENCES [Auth].[Auth_User]([Id])
+    [TerritoriesId] INT NULL, 
+    CONSTRAINT [FK_Retener_Auth_User] FOREIGN KEY (UserId) REFERENCES [Auth].[Auth_User]([Id]),
+	CONSTRAINT [FK_Retener_Territories] FOREIGN KEY (TerritoriesId) REFERENCES Territories([Id])
 )

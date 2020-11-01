@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Motel.Api.Infrastructure;
 using Motel.Core.Configuration;
 using Motel.Core.Infrastructure;
 

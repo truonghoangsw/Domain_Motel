@@ -63,6 +63,8 @@
     <Folder Include="Post" />
     <Folder Include="Payment" />
     <Folder Include="Territories" />
+    <Folder Include="Common" />
+    <Folder Include="Media" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Auth\Auth_User.sql" />
@@ -77,9 +79,15 @@
     <Build Include="Retener\Retener.sql" />
     <Build Include="Territories\Territories.sql" />
     <Build Include="Lesters\Lesters.sql" />
-    <Build Include="Post\Post.sql" />
+    <Build Include="Post\RentalPost.sql" />
     <Build Include="Post\PostTag.sql" />
-    <Build Include="Post\PostImage.sql" />
+    <Build Include="Post\PostComment.sql" />
+    <Build Include="Post\PackageTypePost.sql" />
+    <Build Include="Common\Log.sql" />
+    <Build Include="Media\Download.sql" />
+    <Build Include="Media\Picture.sql" />
+    <Build Include="Post\PostRental_Picture_Mapping.sql" />
+    <Build Include="Media\PictureBinary.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Motel.Database.refactorlog" />

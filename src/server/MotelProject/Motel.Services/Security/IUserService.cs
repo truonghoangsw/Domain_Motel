@@ -41,6 +41,8 @@ namespace Motel.Services.Security
         Auth_User GetUserByUsername(string username);
 
         Auth_User GetUserByEmail(string email);
+        void UpdateCustomerPassword(UserPassword UserPassword);
+
         #endregion
     }
 }

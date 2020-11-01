@@ -35,4 +35,46 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="AddressDetail" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b14c089a-ea9b-4b85-9f5e-94fcaff01cf1" ChangeDateTime="11/01/2020 04:31:39">
+    <Property Name="ElementName" Value="[dbo].[Post].[Lester]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Post]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LesterId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3175e997-4a43-4bc5-af47-9a9487cc621f" ChangeDateTime="11/01/2020 04:32:29">
+    <Property Name="ElementName" Value="[dbo].[Post].[TerritoriesId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Post]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TerritorieId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ee7bac7e-5922-410f-b2b4-cc7eb948ff03" ChangeDateTime="11/01/2020 04:33:07">
+    <Property Name="ElementName" Value="[dbo].[Post].[TerritorieId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Post]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TerritoriesId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ee7c0bed-eafb-47b8-8882-284634cfb44d" ChangeDateTime="11/01/2020 07:22:25">
+    <Property Name="ElementName" Value="[dbo].[PackageTypePost].[PricePer ]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PackageTypePost]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PricePerDay" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d114d13d-187d-4f4b-bc23-c0dc537994b1" ChangeDateTime="11/01/2020 07:23:45">
+    <Property Name="ElementName" Value="[dbo].[PackageTypePost].[CreateTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PackageTypePost]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CreatedTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5565ad49-434b-4886-b21a-acb6c17e733d" ChangeDateTime="11/01/2020 07:57:18">
+    <Property Name="ElementName" Value="[dbo].[FK_PostRental_Picture_Mapping_]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[PostRental_Picture_Mapping]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_PostRental_Picture_Mapping_Picture]" />
+  </Operation>
 </Operations>

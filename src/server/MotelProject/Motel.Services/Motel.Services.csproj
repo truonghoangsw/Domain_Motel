@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Folder Include="Retener\" />
+    <Folder Include="Territories\Caching\" />
   </ItemGroup>
 
   <ItemGroup>

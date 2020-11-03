@@ -10,6 +10,7 @@ namespace Motel.Domain.ContextDataBase.MappingData.Builders
         public Dictionary<Type, string> TableNames =>  new Dictionary<Type, string> 
         { 
              { typeof(PostPictureMaping), "PostRental_Picture_Mapping" },
+            { typeof(PostCategoryMapping), "RentalPost_Category_Mapping" }
         };
 
         public Dictionary<(Type, string), string> ColumnName => new Dictionary<(Type, string), string> { };

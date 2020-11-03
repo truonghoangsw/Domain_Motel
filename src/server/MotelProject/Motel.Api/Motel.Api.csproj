@@ -5,15 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\**" />
+    <Content Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="Infrastructure\**" />
+    <None Remove="Infrastructure\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
     <ProjectReference Include="..\Motel.Services\Motel.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Infrastructure\Cache\" />
-    <Folder Include="Infrastructure\Extensions\" />
   </ItemGroup>
 
   <ItemGroup>

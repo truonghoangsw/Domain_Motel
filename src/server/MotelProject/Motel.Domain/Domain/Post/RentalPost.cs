@@ -22,6 +22,15 @@ namespace Motel.Domain.Domain.Post
 		public int TerritoriesId {get;set;}
 		public int LesterId {get;set;}
 		public string Tag {get;set;}
+		public int PackageTypePostId {get;set;}
+		public DateTime ExpirationDate {get;set;}
+		public DateTime RenewalDate {get;set;}
+		public byte TypeGendeRroom {get;set;}
+		public int ElectricityBill {get;set;}
+		public int WaterBill {get;set;}
+		public int MotelTypeId {get;set;}
+		public int InternetMoney {get;set;}
+		public int ServiceFee {get;set;}
 
     }
 }

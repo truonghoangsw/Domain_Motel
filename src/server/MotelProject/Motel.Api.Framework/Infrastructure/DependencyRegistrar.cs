@@ -4,6 +4,7 @@ using Motel.Core.Infrastructure;
 using Motel.Core.Infrastructure.DependencyManagement;
 using Motel.Domain.ContextDataBase;
 using Motel.Services.Authentication;
+using Motel.Services.RentalPosting;
 using Motel.Services.Security;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,10 @@ namespace Motel.Api.Infrastructure
             builder.RegisterType<IUserService>().As<UserService>().InstancePerLifetimeScope();
             builder.RegisterType<IPermissionService>().As<PermissionService>().InstancePerLifetimeScope();
             builder.RegisterType<IAuthenticationService>().As<CookieAuthenticationService>().InstancePerLifetimeScope();
-            builder.RegisterType<DataProviderManager>().As<IDataProviderManager>().InstancePerDependency();
-
+            builder.RegisterType<IDataProviderManager>().As<DataProviderManager>().InstancePerDependency();
+            builder.RegisterType<ICategoryService>().As<ICategoryService>().InstancePerDependency();
+            builder.RegisterType<IRentalPostService>().As<RentalPostService>().InstancePerDependency();
+            builder.RegisterType<IRentalPostService>().As<RentalPostService>().InstancePerDependency();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Motel.Services.RentalPosting
 {
-    public interface IRentalPostingService
+    public interface IRentalPostService
     {
         #region Rental post
         /// <summary>
@@ -33,8 +33,8 @@ namespace Motel.Services.RentalPosting
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <param name="title">Filter by blog post title</param>
         /// <returns>Blog posts</returns>
-        IPagedList<RentalPost> GetAllRentalPost( string nameWard,string nameDistrict,string nameProvincial,string tag,
-            DateTime? dateFrom = null, DateTime? dateTo = null,int monthlyPrice = 0,
+        IPagedList<RentalPost> GetAllRentalPost(string nameWard, string nameDistrict, string nameProvincial, string tag,
+            DateTime? dateFrom = null, DateTime? dateTo = null, int monthlyPrice = 0,
             int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, string title = null);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Motel.Services.RentalPosting
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>Blog posts</returns>
+        /// <returns>Blog posts</returns>   
         IPagedList<RentalPost> GetAllRentalPostByTag(string tag = "",
             int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
@@ -57,19 +57,19 @@ namespace Motel.Services.RentalPosting
         /// <param name="languageId">Language identifier. 0 if you want to get all blog posts</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Blog post tags</returns>
-        IList<PostTag> GetAllRentalPostTags( int languageId, bool showHidden = false);
+        IList<PostTag> GetAllRentalPostTags(int languageId, bool showHidden = false);
 
         /// <summary>
         /// Inserts a blog post
         /// </summary>
         /// <param name="blogPost">Blog post</param>
-        void InsertBlogPost(RentalPost rentalPost);
+        void InsertRentalPost(RentalPost rentalPost);
 
         /// <summary>
         /// Updates the blog post
         /// </summary>
         /// <param name="blogPost">Blog post</param>
-        void UpdateBlogPost(RentalPost rentalPost);
+        void UpdateRentelPost(RentalPost rentalPost);
 
         /// <summary>
         /// Returns all posts published between the two dates.
@@ -94,6 +94,14 @@ namespace Motel.Services.RentalPosting
         /// <param name="dateTime">Datetime to check; pass null to use current date</param>
         /// <returns>Result</returns>
         bool BlogPostIsAvailable(RentalPost rentalPost, DateTime? dateTime = null);
+
+        #endregion
+
+        #region pictures post
+
+        void DeletedPostPicture(PostPictureMaping postPicture);
+
+
 
         #endregion
     }

@@ -16,7 +16,6 @@ namespace Motel.Services.Logging
     {
         #region Fields
 
-        private readonly CommonSettings _commonSettings;
         
         private readonly IRepository<Log> _logRepository;
         private readonly IWebHelper _webHelper;
@@ -25,11 +24,10 @@ namespace Motel.Services.Logging
 
         #region Ctor
 
-        public DefaultLogger(CommonSettings commonSettings,
+        public DefaultLogger(
             IRepository<Log> logRepository,
             IWebHelper webHelper)
         {
-            _commonSettings = commonSettings;
             _logRepository = logRepository;
             _webHelper = webHelper;
         }
@@ -45,15 +43,7 @@ namespace Motel.Services.Logging
         /// <returns>Result</returns>
         protected virtual bool IgnoreLog(string message)
         {
-            if (!_commonSettings.IgnoreLogWordlist.Any())
-                return false;
-
-            if (string.IsNullOrWhiteSpace(message))
-                return false;
-
-            return _commonSettings
-                .IgnoreLogWordlist
-                .Any(x => message.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
+            return false;
         }
 
         #endregion

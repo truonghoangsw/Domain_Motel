@@ -55,8 +55,7 @@ namespace Motel.Domain.ContextDataBase.MappingData
                     Length = column.Size ?? 0,
                     Precision = column.Precision ?? 0,
                     IsIdentity = column.IsIdentity,
-                    DataType = new SqlDataType((memberInfo as PropertyInfo)?.PropertyType ?? typeof(string)).Type.DataType
-                };
+  DataType = new SqlDataType((memberInfo as PropertyInfo)?.PropertyType ?? typeof(string)).DataType                };
             });
 
             return (T)attribute;

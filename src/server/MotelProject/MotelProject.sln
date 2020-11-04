@@ -32,7 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motel.Core", "Motel.Core\Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motel.Domain", "Motel.Domain\Motel.Domain.csproj", "{336DAB7C-DA04-4736-8954-C209FED8CEE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motel.Api.Framework", "Motel.Api.Framework\Motel.Api.Framework.csproj", "{71081C63-EA87-405C-B788-2D606DFC75BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motel.Api.Framework", "Motel.Api.Framework\Motel.Api.Framework.csproj", "{71081C63-EA87-405C-B788-2D606DFC75BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motel.Api.Services", "Motel.Api.Services\Motel.Api.Services.csproj", "{E2625A41-9EB4-4C2A-ABBC-80D5958B1755}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +80,10 @@ Global
 		{71081C63-EA87-405C-B788-2D606DFC75BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71081C63-EA87-405C-B788-2D606DFC75BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71081C63-EA87-405C-B788-2D606DFC75BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2625A41-9EB4-4C2A-ABBC-80D5958B1755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2625A41-9EB4-4C2A-ABBC-80D5958B1755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2625A41-9EB4-4C2A-ABBC-80D5958B1755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2625A41-9EB4-4C2A-ABBC-80D5958B1755}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +98,7 @@ Global
 		{EE0FFAA4-D50E-421E-9A19-B756E950B76B} = {265DFE00-3FE7-4B6F-A37A-682446E3CC0E}
 		{336DAB7C-DA04-4736-8954-C209FED8CEE9} = {265DFE00-3FE7-4B6F-A37A-682446E3CC0E}
 		{71081C63-EA87-405C-B788-2D606DFC75BF} = {D5421161-A440-49FA-AC66-D4DED26CAC38}
+		{E2625A41-9EB4-4C2A-ABBC-80D5958B1755} = {D5421161-A440-49FA-AC66-D4DED26CAC38}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DAF7C80-5BA5-4DA6-8E29-DE41481D5EE4}

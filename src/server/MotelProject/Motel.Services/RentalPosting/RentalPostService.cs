@@ -19,7 +19,7 @@ namespace Motel.Services.RentalPosting
 {
     public class RentalPostService : IRentalPostService
     {
-         #region Fields
+        #region Fields
 
         protected readonly ICacheKeyService _cacheKeyService;
         protected readonly IEventPublisher _eventPublisher;
@@ -35,6 +35,7 @@ namespace Motel.Services.RentalPosting
 
 
         #endregion
+
         #region Ctor
         public RentalPostService(ICacheKeyService cacheKeyService,IEventPublisher eventPublisher,IWorkContext workContext,
             IPictureService pictureService,IRepository<PostCategoryMapping> postCategoryRepository,IRepository<PostPictureMaping> postPictureRepository,
@@ -54,21 +55,21 @@ namespace Motel.Services.RentalPosting
         }
         #endregion
 
-        #region Post Rentel
-        public IPagedList<RentalPost> GetAllRentalPost(string nameWard, string nameDistrict, string nameProvincial, string tag,
-            DateTime? dateFrom = null, DateTime? dateTo = null, int monthlyPrice = 0,
-            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, string title = null)
-        {
+        //#region Post Rentel
+        //public IPagedList<RentalPost> GetAllRentalPost(string nameWard, string nameDistrict, string nameProvincial, string tag,
+        //    DateTime? dateFrom = null, DateTime? dateTo = null, int monthlyPrice = 0,
+        //    int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, string title = null)
+        //{
+        //}
+        //#endregion
 
-        }
-        #endregion
+        //#region Post Picture
 
-        #region Post Picture
+        //#endregion
 
-        #endregion
+        //#region Post Category
 
-         #region Post Category
+        //#endregion
 
-        #endregion
     }
 }

@@ -1,0 +1,6 @@
+﻿{
+  "DataConnectionString": "Data Source=MSI\\TRUONGHD;Initial Catalog=dbMotelV1;Integrated Security=True;Persist Security Info=False",
+  "DataProvider": "sqlserver",
+  "SQLCommandTimeout": null,
+  "RawDataSettings": {}
+}

@@ -20,11 +20,13 @@ namespace Motel.Api.Infrastructure
         {
              ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             var motelConfig = services.ConfigureStartupConfig<MotelConfig>(configuration.GetSection("Motel"));
+            services.ConfigureStartupConfig<HostingConfig>(configuration.GetSection("Hosting"));
 
              //add accessor to HttpContext
             services.AddHttpContextAccessor();
             CommonHelper.DefaultFileProvider = new MotelFileProvider(webHostEnvironment);
 
+             services.AddHttpContextAccessor();
              services.AddControllers();
 
             var engine = EngineContext.Create();

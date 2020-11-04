@@ -286,7 +286,7 @@ namespace Motel.Core.Caching
         public virtual void Remove(CacheKey key)
         {
             //we should always persist the data protection key list
-            if (key.Key.Equals(NopDataProtectionDefaults.RedisDataProtectionKey, StringComparison.OrdinalIgnoreCase))
+            if (key.Key.Equals(MotelDataProtectionDefaults.RedisDataProtectionKey, StringComparison.OrdinalIgnoreCase))
                 return;
 
             //remove item from caches

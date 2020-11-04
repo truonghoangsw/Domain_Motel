@@ -78,6 +78,7 @@ namespace Motel.Core.Infrastructure
             //register all provided dependencies
             foreach (var dependencyRegistrar in instances)
                 dependencyRegistrar.Register(containerBuilder, _typeFinder, nopConfig);
+
         }
 
         /// <summary>

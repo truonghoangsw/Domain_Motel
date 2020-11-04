@@ -37,7 +37,8 @@ namespace Motel.Api.Controllers
             _logger = logger;
         }
         //do not validate request token (XSRF)
-        public virtual ActionResult<Download> AsyncUpload()
+        [HttpPost]
+        public virtual ActionResult<Download> Post()
         {
             var httpPostedFile = Request.Form.Files.FirstOrDefault();
             if (httpPostedFile == null)

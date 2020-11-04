@@ -5,18 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Motel.Api.Framework\Motel.Api.Framework.csproj" />
     <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
+    <ProjectReference Include="..\Motel.Domain\Motel.Domain.csproj" />
     <ProjectReference Include="..\Motel.Services\Motel.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Infrastructure\Cache\" />
   </ItemGroup>
 
 

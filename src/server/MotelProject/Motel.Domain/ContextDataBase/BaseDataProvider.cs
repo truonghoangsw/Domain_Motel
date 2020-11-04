@@ -103,7 +103,7 @@ namespace Motel.Domain
 
             var storeSettings = EngineContext.Current.Resolve<MotelInformationSettings>();
 
-            return storeSettings.DisplayMiniProfilerInPublicStore ? new ProfiledDbConnection((DbConnection)dbConnection, MiniProfiler.Current) : dbConnection;
+            return  dbConnection;
         }
 
         /// <summary>

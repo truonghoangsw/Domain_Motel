@@ -10,5 +10,6 @@
     [IdentityDay] DATETIME NULL, 
     [AccountName] NVARCHAR(50) NULL, 
     [AvatarUrl] NVARCHAR(150) NULL, 
-    CONSTRAINT [FK_Lester_Auth_User] FOREIGN KEY ([Column]) REFERENCES [ToTable]([ToTableColumn])
+    [UserId] INT NULL, 
+    CONSTRAINT [FK_Lester_Auth_User] FOREIGN KEY (UserId) REFERENCES Auth.Auth_User(Id)
 )

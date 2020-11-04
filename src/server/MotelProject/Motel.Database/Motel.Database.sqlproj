@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{0266640f-5024-4cca-9729-e773296ddae7}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -22,6 +22,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <GenerateCreateScript>True</GenerateCreateScript>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -56,41 +57,43 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="Auth" />
-    <Folder Include="Retener" />
-    <Folder Include="Schema" />
-    <Folder Include="Lesters" />
-    <Folder Include="Post" />
-    <Folder Include="Payment" />
-    <Folder Include="Territories" />
-    <Folder Include="Common" />
-    <Folder Include="Media" />
+    <Folder Include="Tables" />
+    <Folder Include="Tables\Auth" />
+    <Folder Include="Tables\Common" />
+    <Folder Include="Tables\Lesters" />
+    <Folder Include="Tables\Media" />
+    <Folder Include="Tables\Payment" />
+    <Folder Include="Tables\Post" />
+    <Folder Include="Tables\Retener" />
+    <Folder Include="Tables\Territories" />
+    <Folder Include="Tables\Schem" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Auth\Auth_User.sql" />
-    <Build Include="Schema\Auth.sql" />
-    <Build Include="Auth\Auth_Roles.sql" />
-    <Build Include="Auth\Auth_Permission.sql" />
-    <Build Include="Auth\Auth_UserRoles.sql" />
-    <Build Include="Auth\Auth_Assign.sql" />
-    <Build Include="Auth\Auth_ActionLog.sql" />
-    <Build Include="Auth\Auth_UsersLog.sql" />
-    <Build Include="Auth\Auth_UserToken.sql" />
-    <Build Include="Retener\Retener.sql" />
-    <Build Include="Territories\Territories.sql" />
-    <Build Include="Lesters\Lesters.sql" />
-    <Build Include="Post\RentalPost.sql" />
-    <Build Include="Post\PostTag.sql" />
-    <Build Include="Post\PostComment.sql" />
-    <Build Include="Post\PackageTypePost.sql" />
-    <Build Include="Common\Log.sql" />
-    <Build Include="Media\Download.sql" />
-    <Build Include="Media\Picture.sql" />
-    <Build Include="Post\PostRental_Picture_Mapping.sql" />
-    <Build Include="Media\PictureBinary.sql" />
-    <Build Include="Post\PostTagMapping.sql" />
-    <Build Include="Post\Category.sql" />
-    <Build Include="Post\RentalPost_Category_Mapping.sql" />
+    <Build Include="Tables\Auth\Auth_ActionLog.sql" />
+    <Build Include="Tables\Auth\Auth_Assign.sql" />
+    <Build Include="Tables\Auth\Auth_Permission.sql" />
+    <Build Include="Tables\Auth\Auth_Roles.sql" />
+    <Build Include="Tables\Auth\Auth_User.sql" />
+    <Build Include="Tables\Auth\Auth_UserRoles.sql" />
+    <Build Include="Tables\Auth\Auth_UsersLog.sql" />
+    <Build Include="Tables\Auth\Auth_UserToken.sql" />
+    <Build Include="Tables\Common\Log.sql" />
+    <Build Include="Tables\Lesters\Lester.sql" />
+    <Build Include="Tables\Lesters\Lesters.sql" />
+    <Build Include="Tables\Media\Download.sql" />
+    <Build Include="Tables\Media\Picture.sql" />
+    <Build Include="Tables\Media\PictureBinary.sql" />
+    <Build Include="Tables\Post\Category.sql" />
+    <Build Include="Tables\Post\PackageTypePost.sql" />
+    <Build Include="Tables\Post\PostComment.sql" />
+    <Build Include="Tables\Post\PostRental_Picture_Mapping.sql" />
+    <Build Include="Tables\Post\PostTag.sql" />
+    <Build Include="Tables\Post\PostTagMapping.sql" />
+    <Build Include="Tables\Post\RentalPost.sql" />
+    <Build Include="Tables\Post\RentalPost_Category_Mapping.sql" />
+    <Build Include="Tables\Retener\Retener.sql" />
+    <Build Include="Tables\Territories\Territories.sql" />
+    <Build Include="Tables\Schem\Auth.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Motel.Database.refactorlog" />

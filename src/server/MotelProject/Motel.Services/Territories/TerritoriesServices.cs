@@ -7,10 +7,12 @@ namespace Motel.Services.Territories
     using Motel.Domain.ContextDataBase;
     using  Motel.Domain.Domain.Territories;
     using Motel.Services.Caching;
+    using Motel.Services.Caching.Extensions;
     using Motel.Services.Events;
     using Motel.Services.Logging;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class TerritoriesServices : ITerritoriesServices
     {
@@ -68,22 +70,54 @@ namespace Motel.Services.Territories
         public IList<Territories> GetAll()
         {
             var key = _cacheKeyService.PrepareKeyForDefaultCache(TerritoriesDefaults.TerritoriesAllCacheKey);
-            return _staticCacheManager.Get(key,) ;
+            return _staticCacheManager.Get(key,() => GetAllFilter().ToList() ) ;
         }
 
-        public IPagedList<Territories> GetAllFilter(string Name, int StatusId, string PackageName, int Ten, bool? OrderIndex, int PageIndex=0, int PageSize = int.MaxValue, out int totalItem)
+        public IPagedList<Territories> GetAllFilter( bool? OrderIndex =false,int? StatusId = 0,
+            string Name= "",  int PageIndex=0, int PageSize = int.MaxValue)
         {
-            throw new System.NotImplementedException();
+            var query = _territoriesRepository.Table;
+            if(StatusId.HasValue)
+                query = query.Where(x=>x.Status == StatusId);
+            if(string.IsNullOrEmpty(Name))
+                query = query.Where(x=>x.Name.Contains(Name));
+            query = query.Distinct();
+            var unsortedTerritories = query.ToList();
+
+            return new PagedList<Territories>(unsortedTerritories, PageIndex, PageSize);
         }
 
-        public IPagedList<Territories> GetAllParent(string Name, int StatusId, string ParentId, bool OrderIndex, bool LevelObject, int? PageIndex, int? PageSize, out int totalItem)
+        public IPagedList<Territories> GetAllParent(string Name, int? StatusId, int? ParentId, 
+            bool? OrderIndex, bool? LevelObject, int? PageIndex = 0, int? PageSize = int.MaxValue)
         {
-            throw new System.NotImplementedException();
+            var query = _territoriesRepository.Table;
+            if(StatusId.HasValue)
+                query = query.Where(x=>x.Status == StatusId);
+            if(string.IsNullOrEmpty(Name))
+                query = query.Where(x=>x.Name.Contains(Name));
+            if (ParentId.HasValue)
+            {
+                if(ParentId.Value != 0) query = query.Where(x => x.Parent != 0 && x.Parent == ParentId.Value);
+                else query = query.Where(x => x.Parent == 0);
+            }
+            else  query = query.Where(x => x.Parent == 0);
+
+            if (StatusId.HasValue)
+            {
+                query = query.Where(x => x.Status == StatusId.Value);
+            }
+            var unsortedTerritories = query.ToList();
+
+            return new PagedList<Territories>(unsortedTerritories, PageIndex.Value, PageSize.Value);
+
         }
 
         public Territories GetById(int id)
         {
-            throw new System.NotImplementedException();
+             if (id == 0)
+                return null;
+
+            return _territoriesRepository.ToCachedGetById(id);
         }
         #endregion
      

@@ -27,13 +27,14 @@ namespace Motel.Domain.ContextDataBase
                 .Distinct()
                 .ToArray();
 
-            services
-                // add common FluentMigrator services
+             services
+               // add common FluentMigrator services
                 .AddFluentMigratorCore()
                 .AddScoped<IProcessorAccessor, MotelProcessorAccessor>()
                 // set accessor for the connection string
                 .AddScoped<IConnectionStringAccessor>(x => DataSettingsManager.LoadSettings())
                 .AddScoped<IMigrationManager, MigrationManager>()
+                .AddSingleton<IConventionSet, MotelConventionSet>()
                 .ConfigureRunner(rb =>
                     rb.WithVersionTable(new MigrationVersionInfo()).AddSqlServer().AddMySql5()
                         // define the assembly containing the migrations

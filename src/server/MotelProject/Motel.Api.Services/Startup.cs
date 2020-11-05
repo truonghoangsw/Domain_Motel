@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Motel.Api.Framework.Infrastructure;
 using Motel.Api.Infrastructure;
 using Motel.Core.Configuration;
 using Motel.Core.Infrastructure;
@@ -51,7 +52,7 @@ namespace Motel.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.ConfigureRequestPipeline();
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>

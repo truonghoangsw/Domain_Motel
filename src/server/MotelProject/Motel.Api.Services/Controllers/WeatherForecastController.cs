@@ -88,7 +88,6 @@ namespace Motel.Api.Services.Controllers
             catch (Exception exc)
             {
                 _loggers.Error(exc.Message, exc);
-
                 return null;
             }
         }

@@ -94,6 +94,7 @@
     <Build Include="Tables\Retener\Retener.sql" />
     <Build Include="Tables\Territories\Territories.sql" />
     <Build Include="Tables\Schem\Auth.sql" />
+    <Build Include="Tables\Common\Setting.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Motel.Database.refactorlog" />

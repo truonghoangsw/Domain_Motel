@@ -27,6 +27,7 @@ namespace Motel.Api.Infrastructure
             CommonHelper.DefaultFileProvider = new MotelFileProvider(webHostEnvironment);
 
              services.AddHttpContextAccessor();
+            services.AddDataProtection();
              services.AddControllers();
 
             var engine = EngineContext.Create();

@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Motel.Services\Motel.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middleware\" />
+  </ItemGroup>
+
 </Project>

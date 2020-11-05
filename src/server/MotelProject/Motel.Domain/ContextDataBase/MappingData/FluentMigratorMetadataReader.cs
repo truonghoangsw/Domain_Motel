@@ -19,6 +19,7 @@ namespace Motel.Domain.ContextDataBase.MappingData
         private readonly IMigrationManager _migrationManager;
 
         #endregion
+
         #region Ctor
 
         public FluentMigratorMetadataReader()
@@ -27,6 +28,7 @@ namespace Motel.Domain.ContextDataBase.MappingData
         }
 
         #endregion
+
         #region Utils
 
         protected T GetAttribute<T>(Type type, MemberInfo memberInfo) where T : Attribute

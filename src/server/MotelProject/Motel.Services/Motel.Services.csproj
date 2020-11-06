@@ -10,7 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Retener\" />
+    <Folder Include="Lester\Caching\" />
+    <Folder Include="Retener\Caching\" />
     <Folder Include="Territories\Caching\" />
   </ItemGroup>
 

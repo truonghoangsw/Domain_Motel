@@ -1,19 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Mvc\Filters\" />
     <Folder Include="Mvc\ModelBinding\" />
     <Folder Include="Mvc\Routing\" />
     <Folder Include="Mvc\Razor\" />
-    <Folder Include="Infrastructure\" />
     <Folder Include="Validators\" />
     <Folder Include="UI\" />
     <Folder Include="TagHelpers\Admin\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
   </ItemGroup>
 
 </Project>

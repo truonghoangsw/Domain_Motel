@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motel.UI.Cms", "Motel.UI.Cms\Motel.UI.Cms.csproj", "{8EF74DD2-35F2-48EE-85BE-AED38A2B2F6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{C5047CCC-42A5-48D5-B450-C79B2DAA3047}"
-	ProjectSection(SolutionItems) = preProject
-		Motel.DatabaseMigrator\Program.cs = Motel.DatabaseMigrator\Program.cs
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motel.Web.Framework", "Motel.Web.Framework\Motel.Web.Framework.csproj", "{7D151C48-18ED-4050-AEB5-42653F854F9C}"
 EndProject

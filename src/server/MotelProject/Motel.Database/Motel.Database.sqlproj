@@ -78,7 +78,6 @@
     <Build Include="Tables\Auth\Auth_UsersLog.sql" />
     <Build Include="Tables\Auth\Auth_UserToken.sql" />
     <Build Include="Tables\Common\Log.sql" />
-    <Build Include="Tables\Lesters\Lester.sql" />
     <Build Include="Tables\Lesters\Lesters.sql" />
     <Build Include="Tables\Media\Download.sql" />
     <Build Include="Tables\Media\Picture.sql" />
@@ -95,6 +94,7 @@
     <Build Include="Tables\Territories\Territories.sql" />
     <Build Include="Tables\Schem\Auth.sql" />
     <Build Include="Tables\Common\Setting.sql" />
+    <Build Include="Tables\Common\GenericAttribute.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Motel.Database.refactorlog" />

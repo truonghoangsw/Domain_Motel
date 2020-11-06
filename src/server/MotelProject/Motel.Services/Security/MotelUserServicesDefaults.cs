@@ -11,5 +11,6 @@ namespace Motel.Services.Security
 
         public static CacheKey UserRoleIdsCacheKey => new CacheKey("Motel.customer.customerrole.ids-{0}-{1}", CustomerCustomerRolesPrefixCacheKey);
 
+        public static string DefaultHashedPasswordFormat => "SHA512";
     }
 }

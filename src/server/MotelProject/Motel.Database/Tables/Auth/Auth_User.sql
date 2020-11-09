@@ -22,5 +22,6 @@
 	[UpdatedTime] [datetime] NOT NULL,
     [Status] [tinyint] NOT NULL,
     [Avatar] [nvarchar](255) NULL,
-    [Deleted] [tinyint] NOT NULL
+    [Deleted] [tinyint] NOT NULL, 
+    [IsAdmin] BIT NULL
 )

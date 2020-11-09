@@ -9,11 +9,6 @@ namespace Motel.Services.Security.Caching
 {
     public class PermissionRecordCacheEventUser:CacheEventConsumer<Auth_Permission>
     {
-        protected override void ClearCache(Auth_Permission entity)
-        {
-            var prefix = _cacheKeyService.PrepareKeyPrefix(MotelSecurityDefaults.PermissionsAllowedPrefixCacheKey, entity.Name);
-            RemoveByPrefix(prefix);
-            RemoveByPrefix(MotelSecurityDefaults.PermissionsAllByCustomerRoleIdPrefixCacheKey);
-        }
+       
     }
 }

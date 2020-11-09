@@ -1,5 +1,6 @@
 ﻿using Motel.Core;
 using Motel.Core.Caching;
+using Motel.Core.Enum;
 using Motel.Domain.ContextDataBase;
 using Motel.Domain.Domain.Auth;
 using Motel.Domain.Domain.Sercurity;
@@ -21,23 +22,26 @@ namespace Motel.Services.Security
         private readonly UserSettings _userSettings;
         private readonly ICacheKeyService _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IPermissionService _permissionService;
         private readonly IRepository<Auth_User> _userRepository;
         private readonly IRepository<Auth_UserRoles> _userRolesMappingRepository;
-        private readonly IRepository<Auth_Roles> _userRoleRepository;
+        private readonly IRepository<Auth_Assign> _permissionAssign;
         private readonly IStaticCacheManager _staticCacheManager;
+        private readonly IMotelDataProvider _dataProvider;
         private readonly ILogger _logger;
         #endregion
 
         #region Ctor
         public UserService(CachingSettings cachingSettings,
             UserSettings userSettings,
+            IPermissionService permissionService,
             ICacheKeyService cacheKeyService,
+            IRepository<Auth_Assign> permissionAssign,
             IEventPublisher eventPublisher,
             IRepository<Auth_User> userRepository,
             IRepository<Auth_UserRoles> userRolesMappingRepository,
-            IRepository<Auth_Roles> userRoleRepository,
             IStaticCacheManager staticCacheManager,
-            ILogger logger)
+            ILogger logger,IMotelDataProvider dataProvider)
         {
             _cachingSettings = cachingSettings;
             _userSettings = userSettings;
@@ -45,9 +49,11 @@ namespace Motel.Services.Security
             _eventPublisher = eventPublisher;
             _userRolesMappingRepository = userRolesMappingRepository;
             _userRepository = userRepository;
-            _userRoleRepository = userRoleRepository;
             _staticCacheManager = staticCacheManager;
+            _permissionService= permissionService;
             _logger = logger;
+            _permissionAssign = permissionAssign;
+            _dataProvider = dataProvider;
         }
 
         public IPagedList<Auth_User> GetAllUser(DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
@@ -131,19 +137,91 @@ namespace Motel.Services.Security
         }
         #endregion
 
-        public IList<Auth_Roles> GetUserRoles(Auth_User user, bool showHidden = false)
+     
+
+        public void UpdateCustomerPassword(UserPassword userPassword)
+        {
+            try
+            {
+                //prepare parameters
+                var pUserId =  SqlParameterHelper.GetInt32Parameter("@_UserId", userPassword.UserId);
+                var pPasswordHash=  SqlParameterHelper.GetStringParameter("@_PasswordHash", userPassword.PasswordHash);
+                _dataProvider.ExecuteNonQuery("UpdatePasswordUser",pUserId,pPasswordHash);
+                var userId = _userRepository.GetById(userPassword.UserId);
+                _eventPublisher.EntityUpdated(userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("UpdateCustomerPassword error", ex);
+            }
+        }
+
+        public Auth_User InsertUser(Auth_User user)
+        {
+            try
+            {
+                user.CreatedTime = DateTime.Now;
+                user.Status = (int)EnumStatusUser.Approved;
+                _userRepository.Insert(user);
+                _eventPublisher.EntityInserted(user);
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("UpdateCustomerPassword error", ex);
+                return null;
+
+            }
+        }
+
+        public Auth_User InsertUserAdmin(Auth_User user)
+        {
+            try
+            {
+                user.CreatedTime = DateTime.Now;
+                user.Status = (int)EnumStatusUser.Approved;
+                user.IsAdmin = true;
+                _userRepository.Insert(user);
+                _eventPublisher.EntityInserted(user);
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("UpdateCustomerPassword error", ex);
+                return null;
+
+            }
+        }
+
+        public void UpdateUser(Auth_User customer)
+        {
+            if (customer == null)
+                throw new ArgumentNullException(nameof(customer));
+
+            _userRepository.Update(customer);
+
+            //event notification
+            _eventPublisher.EntityUpdated(customer);
+        }
+
+
+        #region User roles
+        public IList<Auth_UserRoles> GetUserRoles(Auth_User user, bool showHidden = false)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
             try
             {
-                   var query = from ur in  _userRoleRepository.Table join urm in _userRolesMappingRepository.Table
-                               on ur.Id equals  urm.RoleID
-                               where urm.RoleID == user.Id
-                               orderby ur.Id
-                               select ur;
-                    var key = _cacheKeyService.PrepareKeyForShortTermCache(MotelUserServicesDefaults.UserRoleIdsCacheKey, user, showHidden);
-                return query.ToCachedList(key);
+                var key = _cacheKeyService.PrepareKeyForShortTermCache(MotelUserServicesDefaults.UserRolesByObjectCacheKey, user);
+
+                var query = from ur in  _userRolesMappingRepository.Table join urm in _userRolesMappingRepository.Table
+                            on ur.Id equals  urm.RoleID
+                            where urm.RoleID == user.Id
+                            orderby ur.Id
+                            select ur;
+                return _staticCacheManager.Get(key, () => query.ToList());
 
             }
             catch (Exception ex)
@@ -153,10 +231,67 @@ namespace Motel.Services.Security
             }
         }
 
-        public void UpdateCustomerPassword(UserPassword UserPassword)
+        public int[] GetCustomerRoleIds(Auth_User user, bool showHidden = false)
         {
-            if (UserPassword == null)
-                throw new ArgumentNullException(nameof(UserPassword));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            try
+            {
+                var key = _cacheKeyService.PrepareKeyForShortTermCache(MotelUserServicesDefaults.UserRoleIdsCacheKey, user);
+
+                var query = from ur in  _userRolesMappingRepository.Table join urm in _userRolesMappingRepository.Table
+                            on ur.Id equals  urm.RoleID
+                            where urm.RoleID == user.Id
+                            orderby ur.Id
+                            select ur.Id;
+                return _staticCacheManager.Get(key, () => query.ToArray());
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("GetCustomerRoles error",ex);
+                return null;
+            }
         }
+
+        public void AddUserRoleMapping(Auth_UserRoles roleMapping)
+        {
+            if (roleMapping == null)
+            throw new ArgumentNullException(nameof(roleMapping));
+
+            _userRolesMappingRepository.Insert(roleMapping);
+
+            _eventPublisher.EntityInserted(roleMapping);  
+
+        }
+
+        public void RemoveUserRoleMapping(Auth_UserRoles roleMapping)
+        {
+            if (roleMapping == null)
+                throw new ArgumentNullException(nameof(roleMapping));
+
+            _userRolesMappingRepository.Delete(roleMapping);
+            _eventPublisher.EntityDeleted(roleMapping);  
+        }
+
+     
+        #endregion
+
+        #region User Permisson
+        public IList<Auth_Assign> GetAllPermissonOfUser(int Id)
+        {
+           var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllowedCacheKey, ObjectTypeEnum.User,Id);
+
+             var query = from pa in _permissionAssign.Table
+                where pa.ObjectID == Id && pa.ObjectType == (int)ObjectTypeEnum.User
+                select pa;
+
+            return query.ToCachedList(key);
+        }
+        public IList<Auth_Assign> GetAllPermissonOfUser(Auth_User user)
+        {
+            return GetAllPermissonOfUser(user.Id);
+        }
+        #endregion
     }
 }

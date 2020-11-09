@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Motel.Web.Framework.Models
 {
-    public class IPagedModel<T> where T:BaseMotelModel
+    public partial interface IPagedModel<T> where T : BaseMotelModel
     {
         
     }

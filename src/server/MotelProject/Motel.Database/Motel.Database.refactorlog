@@ -91,4 +91,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="PostTagId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b02f0bba-67bc-4001-aab0-4ec24d8ebed2" ChangeDateTime="11/08/2020 07:36:48">
+    <Property Name="ElementName" Value="[Auth].[Auth_User].[isAdmin]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[Auth_User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsAdmin" />
+  </Operation>
 </Operations>

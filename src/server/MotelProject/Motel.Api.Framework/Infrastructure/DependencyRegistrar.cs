@@ -54,6 +54,7 @@ namespace Motel.Api.Infrastructure
             builder.RegisterType<DownloadService>().As<IDownloadService>().InstancePerLifetimeScope();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
             builder.RegisterType<PermissionService>().As<IPermissionService>().InstancePerLifetimeScope();
+            builder.RegisterType<RolesUserServices>().As<IRolesUserServices>().InstancePerLifetimeScope();
             builder.RegisterType<CookieAuthenticationService>().As<IAuthenticationService>().InstancePerLifetimeScope();
             builder.RegisterType<DataProviderManager>().As<IDataProviderManager>().InstancePerDependency();
             builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerDependency();

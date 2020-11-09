@@ -5,17 +5,11 @@ using System.Text;
 
 namespace Motel.Domain.Domain.Sercurity
 {
-    public class UserPassword: BaseEntity
+    public class UserPassword
     {
-        
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the password
-        /// </summary>
-        public string Password { get; set; }
-        public string PasswordSalt { get; set; }
-        public DateTime CreatedOnUtc { get; set; }
+        public string PasswordHash { get; set; }
 
     }
 }

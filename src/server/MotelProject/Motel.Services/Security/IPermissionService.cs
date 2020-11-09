@@ -58,9 +58,9 @@ namespace Motel.Services.Security
         /// Authorize permission
         /// </summary>
         /// <param name="permission">Permission record</param>
-        /// <param name="customer">Customer</param>
+        /// <param name="user">user</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        bool Authorize(Auth_Permission permission, Auth_User customer);
+        bool Authorize(Auth_Permission permission, Auth_User user);
 
         /// <summary>
         /// Authorize permission
@@ -73,35 +73,37 @@ namespace Motel.Services.Security
         /// Authorize permission
         /// </summary>
         /// <param name="Auth_PermissionSystemName">Permission record system name</param>
-        /// <param name="customer">Customer</param>
+        /// <param name="user">user</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        bool Authorize(string Auth_PermissionSystemName, Auth_User customer);
+        bool Authorize(string Auth_PermissionSystemName, Auth_User user);
 
         /// <summary>
         /// Authorize permission
         /// </summary>
         /// <param name="Auth_PermissionSystemName">Permission record system name</param>
-        /// <param name="customerRoleId">Customer role identifier</param>
+        /// <param name="userRoleId">user role identifier</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        bool Authorize(string Auth_PermissionSystemName, int customerRoleId);
+        bool Authorize(string Auth_PermissionSystemName, int UserRoleId,int TypeObject);
 
         /// <summary>
-        /// Gets a permission record-customer role mapping
+        /// Gets a permission record-user role mapping
         /// </summary>
         /// <param name="permissionId">Permission identifier</param>
         IList<Auth_Assign> GetMappingByAuth_PermissionId(int permissionId);
 
         /// <summary>
-        /// Delete a permission record-customer role mapping
+        /// Delete a permission record-user role mapping
         /// </summary>
         /// <param name="permissionId">Permission identifier</param>
-        /// <param name="customerRoleId">Customer role identifier</param>
-        void DeleteAuth_PermissionCustomerRoleMapping(int permissionId, int customerRoleId);
+        /// <param name="userRoleId">user role identifier</param>
+        void DeleteAuth_PermissionUserMapping(int permissionId, int userRoleId);
 
         /// <summary>
-        /// Inserts a permission record-customer role mapping
+        /// Inserts a permission record-user role mapping
         /// </summary>
-        /// <param name="Auth_PermissionCustomerRoleMapping">Permission record-customer role mapping</param>
-        void InsertAuth_PermissionCustomerRoleMapping(Auth_Assign Auth_PermissionCustomerRoleMapping);
+        /// <param name="Auth_PermissionuserRoleMapping">Permission record-user role mapping</param>
+        void InsertAuth_PermissionUserMapping(Auth_Assign auth_PermissionUserMapping);
+        void InsertAuth_PermissionRolesMapping(Auth_Assign auth_PermissionRoleMapping);
+
     }
 }

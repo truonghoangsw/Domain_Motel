@@ -1,4 +1,5 @@
 ﻿using Motel.Core;
+using Motel.Web.Framework.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,7 +34,7 @@ namespace Motel.Web.Framework.Infrastructure
         public static TListModel PrepareToGrid<TListModel, TModel, TObject>(this TListModel listModel,
             BaseSearchModel searchModel, IPagedList<TObject> objectList, Func<IEnumerable<TModel>> dataFillFunction) 
             where TListModel : BasePagedListModel<TModel>
-            where TModel : BaseNopModel
+            where TModel : BaseMotelModel
         {
             if (listModel == null)
                 throw new ArgumentNullException(nameof(listModel));

@@ -29,6 +29,6 @@ namespace Motel.Domain.Domain.Auth
 		public int Status {get;set;}
 		public string Avatar {get;set;}
 		public byte Deleted {get;set;}
-
+		public bool IsAdmin { get; set;}
 	}
 }

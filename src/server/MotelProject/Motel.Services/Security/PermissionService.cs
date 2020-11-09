@@ -10,6 +10,7 @@ using Motel.Services.Caching.Extensions;
 using System;
 using Motel.Services.Events;
 using Motel.Services.Logging;
+using Motel.Core.Enum;
 
 namespace Motel.Services.Security
 {
@@ -20,7 +21,7 @@ namespace Motel.Services.Security
         private readonly IUserService _userService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<Auth_Permission> _permissionRecordRepository;
-        private readonly IRepository<Auth_Assign> _permissionRecordCustomerRoleMappingRepository;
+        private readonly IRepository<Auth_Assign> _permissionAssign;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IWorkContext _workContext;
         private readonly ILogger _logger;
@@ -39,7 +40,7 @@ namespace Motel.Services.Security
             _userService = userService;
             _eventPublisher = eventPublisher;
             _permissionRecordRepository = permissionRecordRepository;
-            _permissionRecordCustomerRoleMappingRepository = permissionRecordCustomerRoleMappingRepository;
+            _permissionAssign = permissionRecordCustomerRoleMappingRepository;
             _staticCacheManager = staticCacheManager;
             _workContext = workContext;
             _logger = logger;
@@ -53,17 +54,15 @@ namespace Motel.Services.Security
         /// <summary>
         /// Get permission records by customer role identifier
         /// </summary>
-        /// <param name="customerRoleId">Customer role identifier</param>
+        /// <param name="userRoleId">Customer role identifier</param>
         /// <returns>Permissions</returns>
-        protected virtual IList<Auth_Permission> GetPermissionRecordsByCustomerRoleId(int customerRoleId)
+        protected virtual IList<Auth_Assign> GetPermissionRecordsByUserRoleId(int userRoleId,int objectType)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllByCustomerRoleIdCacheKey, customerRoleId);
+            var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllowedCacheKey, objectType,userRoleId);
 
-             var query = from pr in _permissionRecordRepository.Table
-                join prcrm in _permissionRecordCustomerRoleMappingRepository.Table on pr.Permission equals prcrm.
-                     Permission
-                orderby pr.Id
-                select pr;
+             var query = from pa in _permissionAssign.Table
+                where pa.ObjectID == userRoleId && pa.ObjectType == objectType
+                select pa;
 
             return query.ToCachedList(key);
         }
@@ -96,26 +95,25 @@ namespace Motel.Services.Security
         {
             if (string.IsNullOrEmpty(auth_PermissionSystemName))
                 return false;
-
+            if(Authorize(auth_PermissionSystemName, customer.Id,(int)ObjectTypeEnum.User))
+                return true;
             var userRoles = _userService.GetUserRoles(customer);
-             foreach (var role in userRoles)
-                if (Authorize(auth_PermissionSystemName, role.Id))
-                    return true;
-                else if(Authorize(auth_PermissionSystemName, customer.Id))
-                    return true;
+            foreach (var role in userRoles)
+            if (Authorize(auth_PermissionSystemName, role.Id,(int)ObjectTypeEnum.Role))
+                return true;
             return false;
         }
 
-        public bool Authorize(string auth_PermissionSystemName, int customerRoleId)
+        public bool Authorize(string auth_PermissionSystemName, int userRoleId,int objectType)
         {
              if (string.IsNullOrEmpty(auth_PermissionSystemName))
                 return false;
 
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllowedCacheKey, auth_PermissionSystemName, customerRoleId);
+            var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllowedCacheKey , objectType,userRoleId);
             
             return _staticCacheManager.Get(key, () =>
             {
-                var permissions = GetPermissionRecordsByCustomerRoleId(customerRoleId);
+                var permissions = GetPermissionRecordsByUserRoleId(userRoleId,objectType);
                 foreach (var permission in permissions)
                     if (permission.Permission.Equals(auth_PermissionSystemName, StringComparison.InvariantCultureIgnoreCase))
                         return true;
@@ -130,7 +128,9 @@ namespace Motel.Services.Security
             {
                if (permission == null)
                     return;
+
                 _permissionRecordRepository.Delete(permission);
+
                 _eventPublisher.EntityDeleted(permission);
             }
             catch (System.Exception ex)
@@ -140,15 +140,15 @@ namespace Motel.Services.Security
             }
         }
 
-        public void DeleteAuth_PermissionCustomerRoleMapping(int permissionId, int customerRoleId)
+        public void DeleteAuth_PermissionUserMapping(int permissionId, int customerRoleId)
         {
             var permissionRecord = GetAuth_PermissionById(permissionId);
-             var mapping = _permissionRecordCustomerRoleMappingRepository.Table.FirstOrDefault(prcm => prcm.ObjectID == customerRoleId && prcm.Permission == permissionRecord.Permission);
+             var mapping = _permissionAssign.Table.FirstOrDefault(prcm => prcm.ObjectID == customerRoleId && prcm.ObjectType == (int)ObjectTypeEnum.User && prcm.Permission == permissionRecord.Permission);
 
             if (mapping is null)
                 throw new Exception(string.Empty);
 
-            _permissionRecordCustomerRoleMappingRepository.Delete(mapping);
+            _permissionAssign.Delete(mapping);
 
             //event notification
             _eventPublisher.EntityDeleted(mapping);
@@ -187,7 +187,7 @@ namespace Motel.Services.Security
 
         public IList<Auth_Assign> GetMappingByAuth_PermissionId(int permissionId)
         {
-            var query = _permissionRecordCustomerRoleMappingRepository.Table;
+            var query = _permissionAssign.Table;
             var permission = GetAuth_PermissionById(permissionId);
             if(permission == null)
                 return null;
@@ -206,15 +206,15 @@ namespace Motel.Services.Security
             _eventPublisher.EntityInserted(permission);
         }
 
-        public void InsertAuth_PermissionCustomerRoleMapping(Auth_Assign Auth_PermissionCustomerRoleMapping)
+        public void InsertAuth_PermissionUserMapping(Auth_Assign auth_PermissionUserMapping)
         {
-           if (Auth_PermissionCustomerRoleMapping is null)
-                throw new ArgumentNullException(nameof(Auth_PermissionCustomerRoleMapping));
-
-            _permissionRecordCustomerRoleMappingRepository.Insert(Auth_PermissionCustomerRoleMapping);
+           if (auth_PermissionUserMapping is null)
+                throw new ArgumentNullException(nameof(auth_PermissionUserMapping));
+            auth_PermissionUserMapping.ObjectType = (int)ObjectTypeEnum.User;
+            _permissionAssign.Insert(auth_PermissionUserMapping);
 
             //event notification
-            _eventPublisher.EntityInserted(Auth_PermissionCustomerRoleMapping);
+            _eventPublisher.EntityInserted(auth_PermissionUserMapping);
         }
 
         public void UpdateAuth_Permission(Auth_Permission permission)
@@ -228,6 +228,18 @@ namespace Motel.Services.Security
             //event notification
             _eventPublisher.EntityUpdated(permission);
         }
-        #endregion 
+
+        public void InsertAuth_PermissionRolesMapping(Auth_Assign auth_PermissionRoleMapping)
+        {
+           if (auth_PermissionRoleMapping is null)
+                throw new ArgumentNullException(nameof(auth_PermissionRoleMapping));
+            auth_PermissionRoleMapping.ObjectType = (int)ObjectTypeEnum.Role;
+            _permissionAssign.Insert(auth_PermissionRoleMapping);
+
+            //event notification
+            _eventPublisher.EntityInserted(auth_PermissionRoleMapping);
+        }
+
+        #endregion
     }
 }

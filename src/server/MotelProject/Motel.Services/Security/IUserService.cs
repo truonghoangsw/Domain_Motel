@@ -8,10 +8,23 @@ namespace Motel.Services.Security
 {
     public interface IUserService
     {
-        IList<Auth_Roles> GetUserRoles(Auth_User user, bool showHidden = false);
-     
+        #region User Roles
+        IList<Auth_UserRoles> GetUserRoles(Auth_User user, bool showHidden = false);
 
-        #region Customers
+        int[] GetCustomerRoleIds(Auth_User user, bool showHidden = false);
+
+        void AddUserRoleMapping(Auth_UserRoles roleMapping);
+
+        void RemoveUserRoleMapping(Auth_UserRoles roleMapping);
+
+        #endregion
+
+        #region User permission
+        IList<Auth_Assign> GetAllPermissonOfUser(int Id);
+        IList<Auth_Assign> GetAllPermissonOfUser(Auth_User user);
+        #endregion
+
+        #region User
         /// <summary>
         /// Gets all customers
         /// </summary>
@@ -42,6 +55,10 @@ namespace Motel.Services.Security
 
         Auth_User GetUserByEmail(string email);
         void UpdateCustomerPassword(UserPassword UserPassword);
+
+        Auth_User InsertUser(Auth_User user);
+        Auth_User InsertUserAdmin(Auth_User user);
+        void UpdateUser(Auth_User customer);
 
         #endregion
     }

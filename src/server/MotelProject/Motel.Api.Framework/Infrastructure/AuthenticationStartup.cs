@@ -23,7 +23,7 @@ namespace Motel.Api.Framework.Infrastructure
             services.AddMotelDataProtection();
 
             //add authentication
-            services.AddMotelAuthentication();
+            //services.AddMotelAuthentication();
         }
 
         /// <summary>

@@ -6,7 +6,8 @@ using System.Text;
 
 namespace Motel.Services.Security.Caching
 {
-    public partial class  UserPasswordCacheEventConsumer:CacheEventConsumer<UserPassword>
+    public class RolesCacheEventConsumer:CacheEventConsumer<Auth_Roles>
     {
+     
     }
 }

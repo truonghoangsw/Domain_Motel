@@ -67,6 +67,7 @@
     <Folder Include="Tables\Retener" />
     <Folder Include="Tables\Territories" />
     <Folder Include="Tables\Schem" />
+    <Folder Include="ProcedureStored" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Auth\Auth_ActionLog.sql" />
@@ -95,6 +96,7 @@
     <Build Include="Tables\Schem\Auth.sql" />
     <Build Include="Tables\Common\Setting.sql" />
     <Build Include="Tables\Common\GenericAttribute.sql" />
+    <Build Include="ProcedureStored\UpdatePasswordUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Motel.Database.refactorlog" />

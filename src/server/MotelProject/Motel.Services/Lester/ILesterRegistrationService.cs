@@ -4,10 +4,7 @@ using System.Text;
 
 namespace Motel.Services.Lester
 {
-    public interface ILesterServices
+    public interface ILesterRegistrationService
     {
-        #region LesterServices
-
-        #endregion
     }
 }

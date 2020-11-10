@@ -24,6 +24,7 @@ namespace Motel.Services.Security
         private readonly IEventPublisher _eventPublisher;
         private readonly IPermissionService _permissionService;
         private readonly IRepository<Auth_User> _userRepository;
+        private readonly IRolesUserServices _rolesServices;
         private readonly IRepository<Auth_UserRoles> _userRolesMappingRepository;
         private readonly IRepository<Auth_Assign> _permissionAssign;
         private readonly IStaticCacheManager _staticCacheManager;
@@ -38,6 +39,7 @@ namespace Motel.Services.Security
             ICacheKeyService cacheKeyService,
             IRepository<Auth_Assign> permissionAssign,
             IEventPublisher eventPublisher,
+            IRolesUserServices rolesServices,
             IRepository<Auth_User> userRepository,
             IRepository<Auth_UserRoles> userRolesMappingRepository,
             IStaticCacheManager staticCacheManager,
@@ -54,6 +56,7 @@ namespace Motel.Services.Security
             _logger = logger;
             _permissionAssign = permissionAssign;
             _dataProvider = dataProvider;
+            _rolesServices =rolesServices;
         }
 
         public IPagedList<Auth_User> GetAllUser(DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
@@ -156,7 +159,7 @@ namespace Motel.Services.Security
             }
         }
 
-        public Auth_User InsertUser(Auth_User user)
+        public Auth_User InsertUserLester(Auth_User user)
         {
             try
             {
@@ -164,6 +167,13 @@ namespace Motel.Services.Security
                 user.Status = (int)EnumStatusUser.Approved;
                 _userRepository.Insert(user);
                 _eventPublisher.EntityInserted(user);
+                var roles = _rolesServices.GetRoleByName(RoleDefault.RoleLester);
+                var usersRole = new Auth_UserRoles()
+                {
+                    UserID =user.Id,
+                    RoleID = roles.Id
+                };
+                AddUserRoleMapping(usersRole);
                 return user;
 
             }
@@ -174,7 +184,31 @@ namespace Motel.Services.Security
 
             }
         }
+        public Auth_User InsertUserRetener(Auth_User user)
+        {
+            try
+            {
+                user.CreatedTime = DateTime.Now;
+                user.Status = (int)EnumStatusUser.Approved;
+                _userRepository.Insert(user);
+                _eventPublisher.EntityInserted(user);
+                var roles = _rolesServices.GetRoleByName(RoleDefault.RoleRetener);
+                var usersRole = new Auth_UserRoles()
+                {
+                    UserID =user.Id,
+                    RoleID = roles.Id
+                };
+                AddUserRoleMapping(usersRole);
+                return user;
 
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("UpdateCustomerPassword error", ex);
+                return null;
+
+            }
+        }
         public Auth_User InsertUserAdmin(Auth_User user)
         {
             try
@@ -243,7 +277,7 @@ namespace Motel.Services.Security
                             on ur.Id equals  urm.RoleID
                             where urm.RoleID == user.Id
                             orderby ur.Id
-                            select ur.Id;
+                            select ur.RoleID;
                 return _staticCacheManager.Get(key, () => query.ToArray());
 
             }
@@ -257,7 +291,7 @@ namespace Motel.Services.Security
         public void AddUserRoleMapping(Auth_UserRoles roleMapping)
         {
             if (roleMapping == null)
-            throw new ArgumentNullException(nameof(roleMapping));
+                throw new ArgumentNullException(nameof(roleMapping));
 
             _userRolesMappingRepository.Insert(roleMapping);
 
@@ -274,7 +308,7 @@ namespace Motel.Services.Security
             _eventPublisher.EntityDeleted(roleMapping);  
         }
 
-     
+       
         #endregion
 
         #region User Permisson
@@ -292,6 +326,9 @@ namespace Motel.Services.Security
         {
             return GetAllPermissonOfUser(user.Id);
         }
+
+       
+
         #endregion
     }
 }

@@ -6,9 +6,8 @@ using System.Text;
 
 namespace Motel.Domain.Domain.Sercurity
 {
-      public class CustomPrincipal : IPrincipal
+    public class CustomPrincipal : IPrincipal
     {
-        public IIdentity Identity { get; private set; }
         public bool HasPermission(string permission)
         {
             if (Permissions.Any(r => permission.Contains(r)))
@@ -33,9 +32,8 @@ namespace Motel.Domain.Domain.Sercurity
             }
         }
 
-        public CustomPrincipal(string Username)
+        public CustomPrincipal()
         {
-            this.Identity = new GenericIdentity(Username);
         }
        
 

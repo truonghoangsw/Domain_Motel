@@ -1,4 +1,5 @@
 ﻿using Motel.Core.Caching;
+using Motel.Domain.ContextDataBase;
 using Motel.Domain.Domain.Lester;
 using Motel.Services.Security;
 using System;
@@ -11,10 +12,12 @@ namespace Motel.Services.Lester
     {
         #region Fields
         private readonly CachingSettings _cachingSettings;
-        private readonly  LesterSettings _customerSettings;
-        private readonly  UserService _userService;
-        private readonly  IPermissionService _permissionService;
+        private readonly LesterSettings _customerSettings;
+        private readonly UserService _userService;
+        private readonly IPermissionService _permissionService;
+        private readonly IRepository<Lesters> _lestersRepository;
 
+        
         #endregion
 
         #region Ctor
@@ -26,9 +29,12 @@ namespace Motel.Services.Lester
 
         #endregion
 
-       
-        #region Method
 
+        #region Method
+        public Lesters InsertLesters(Lesters lesters)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

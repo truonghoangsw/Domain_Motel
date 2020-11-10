@@ -9,7 +9,9 @@ namespace Motel.Services.Security
     {
         public static string UserRolesPrefixCacheKey => "Motel.userrole.";
         public static CacheKey UserRolesByObjectCacheKey => new CacheKey("Motel.userrole.roleObj-{0}", UserRolesPrefixCacheKey);
+        public static int PasswordSaltKeySize => 5;
 
+        public static string DefaultHashedPasswordFormat => "SHA512";
 
         public static string UserRolesIdPrefixCacheKey => "Motel.user.userrole";
         /// <summary>

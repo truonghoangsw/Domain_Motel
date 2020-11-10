@@ -16,7 +16,6 @@ namespace Motel.Services.Security
         void AddUserRoleMapping(Auth_UserRoles roleMapping);
 
         void RemoveUserRoleMapping(Auth_UserRoles roleMapping);
-
         #endregion
 
         #region User permission
@@ -56,7 +55,8 @@ namespace Motel.Services.Security
         Auth_User GetUserByEmail(string email);
         void UpdateCustomerPassword(UserPassword UserPassword);
 
-        Auth_User InsertUser(Auth_User user);
+        Auth_User InsertUserLester(Auth_User user);
+        Auth_User InsertUserRetener(Auth_User user);
         Auth_User InsertUserAdmin(Auth_User user);
         void UpdateUser(Auth_User customer);
 

@@ -28,8 +28,8 @@ namespace Motel.Domain.Domain.Sercurity
         /// {0} : Role system name
         /// {1} : user ID
         /// </remarks>
-        public static CacheKey RolesAllowedCacheKey => new CacheKey("Motel.roles.allowed-{0}-{1}", RolesAllowedPrefixCacheKey);
-        public static string RolesAllowedPrefixCacheKey => "Motel.roles.allowed-{0}";
+        public static CacheKey RolesAllowedCacheKey => new CacheKey("Motel.roles.allowed-{0}", RolesAllowedPrefixCacheKey);
+        public static string RolesAllowedPrefixCacheKey => "Motel.roles.allowed";
 
       
         public static string RolesAllByUserIdPrefixCacheKey => "Motel.roles.allbyuserid";

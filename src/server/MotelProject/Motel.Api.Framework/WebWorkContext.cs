@@ -9,5 +9,6 @@ namespace Motel.Api.Framework
     public class WebWorkContext : IWorkContext
     {
         public Auth_User CurrentUser { get;set;}
+        public CustomPrincipal CustomPrincipal { get;set;}
     }
 }

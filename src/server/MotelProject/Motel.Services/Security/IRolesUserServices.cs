@@ -14,6 +14,8 @@ namespace Motel.Services.Security
         /// <returns>Permissions</returns>
         IList<Auth_Roles> GetRoles(int pageIndex = 0,int pageSize = int.MaxValue,string Name ="");
         Auth_Roles GetRoleById(int Id);
+        Auth_Roles GetRoleByName(string name);
+        IList<string> GetNameRoles(int userId);
         IList<Auth_Assign> GetPermissonOfRole(int roleId);
         IList<Auth_Assign> GetPermissonOfRole(Auth_Roles role);
         void InsertRoles(Auth_Roles roles);

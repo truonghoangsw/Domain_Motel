@@ -9,5 +9,6 @@ namespace Motel.Domain
     public interface IWorkContext
     {
         Auth_User CurrentUser { get; set; }
+        CustomPrincipal CustomPrincipal { get; set;}
     }
 }

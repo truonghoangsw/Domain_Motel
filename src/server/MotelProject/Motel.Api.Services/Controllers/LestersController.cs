@@ -11,5 +11,6 @@ namespace Motel.Api.Services.Controllers
     [ApiController]
     public class LestersController : ControllerBase
     {
+
     }
 }

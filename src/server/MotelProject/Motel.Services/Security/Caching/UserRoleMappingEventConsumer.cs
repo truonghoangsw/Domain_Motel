@@ -12,6 +12,8 @@ namespace Motel.Services.Security.Caching
         {
             var keyIds = _cacheKeyService.PrepareKey(MotelUserServicesDefaults.UserRoleIdsCacheKey, auth_UserRole.UserID);
             var keyObjec = _cacheKeyService.PrepareKey(MotelUserServicesDefaults.UserRolesByObjectCacheKey, auth_UserRole.UserID);
+            var keyNameRoles =  _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.RolesAllowedCacheKey, auth_UserRole.UserID);;
+            Remove(keyNameRoles);
             Remove(keyIds);
             Remove(keyObjec);
         }

@@ -1,4 +1,5 @@
-﻿using Motel.Core.Enum;
+﻿using Motel.Core.Caching;
+using Motel.Core.Enum;
 using Motel.Domain;
 using Motel.Domain.ContextDataBase;
 using Motel.Domain.Domain.Sercurity;
@@ -22,13 +23,15 @@ namespace Motel.Services.Security
         protected readonly IEventPublisher _eventPublisher;
         protected readonly ICacheKeyService _cacheKeyService;
         protected readonly ILogger _logger;
+        protected readonly IStaticCacheManager _staticCache;
         protected readonly IWorkContext _workContext;
        
         #endregion
 
         #region Ctor
          public RolesUserServices(IRepository<Auth_Roles> repositoryRoles, IRepository<Auth_Assign> permissionAssign, 
-            IEventPublisher eventPublisher, ICacheKeyService cacheKeyService, ILogger logger,IWorkContext workContext,IRepository<Auth_UserRoles> repositoryRolesUser)
+            IEventPublisher eventPublisher, ICacheKeyService cacheKeyService, ILogger logger,IStaticCacheManager staticCache,
+            IWorkContext workContext,IRepository<Auth_UserRoles> repositoryRolesUser)
         {
             _repositoryRoles = repositoryRoles;
             _permissionAssign = permissionAssign;
@@ -36,6 +39,7 @@ namespace Motel.Services.Security
             _cacheKeyService = cacheKeyService;
             _repositoryRolesUser = repositoryRolesUser;
             _logger = logger;
+            _staticCache= staticCache;
             _workContext = workContext;
         }
 
@@ -54,6 +58,17 @@ namespace Motel.Services.Security
             }
             _repositoryRoles.Delete(roles);
             _eventPublisher.EntityDeleted(roles);
+        }
+
+        public IList<string> GetNameRoles(int userId)
+        {
+             var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.RolesAllowedCacheKey, userId);
+             var query = from urm in _repositoryRolesUser.Table join 
+                         ur in _repositoryRoles.Table on urm.RoleID equals ur.Id
+                         where urm.UserID == userId
+                         select ur.Name;
+
+            return _staticCache.Get(key,()=> query.ToList());
         }
 
         public IList<Auth_Assign> GetPermissonOfRole(int roleId)
@@ -79,9 +94,15 @@ namespace Motel.Services.Security
             return _repositoryRoles.GetById(Id);
         }
 
+        public Auth_Roles GetRoleByName(string name)
+        {
+           return _repositoryRoles.Table.FirstOrDefault(x=>x.Name.ToLower().Contains(name.ToLower()));
+        }
+
         public IList<Auth_Roles> GetRoles(int pageIndex = 0, int pageSize = int.MaxValue, string Name = "")
         {
             var query = _repositoryRoles.Table;
+
             if(string.IsNullOrEmpty(Name))
                 query = query.Where(x=>x.Name.Contains(Name));
             query = query.Skip(pageSize * pageIndex).Take(pageSize);

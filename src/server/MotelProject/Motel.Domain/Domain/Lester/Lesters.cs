@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Motel.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Motel.Domain.Domain.Lester
 {
-	public class Lesters
+	public class Lesters:BaseEntity
 	{
-		public int Id {get;set;}
 		public string Mobile {get;set;}
 		public string Salt {get;set;}
 		public string Password {get;set;}

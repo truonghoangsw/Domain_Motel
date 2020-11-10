@@ -47,7 +47,6 @@ namespace Motel.Api.Controllers
             }
 
             var fileBinary = _downloadService.GetDownloadBits(httpPostedFile);
-
             var qqFileNameParameter = "qqfilename";
             var fileName = httpPostedFile.FileName;
             if (string.IsNullOrEmpty(fileName) && Request.Form.ContainsKey(qqFileNameParameter))
@@ -56,7 +55,7 @@ namespace Motel.Api.Controllers
             fileName = _fileProvider.GetFileName(fileName);
 
             var contentType = httpPostedFile.ContentType;
-
+             
             var fileExtension = _fileProvider.GetFileExtension(fileName);
             if (!string.IsNullOrEmpty(fileExtension))
                 fileExtension = fileExtension.ToLowerInvariant();

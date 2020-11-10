@@ -1,4 +1,5 @@
 ﻿using Motel.Domain;
+using Motel.Domain.Domain.Sercurity;
 using System;
 using System.Collections.Generic;
 using System.Text;

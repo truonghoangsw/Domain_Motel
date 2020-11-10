@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Motel.Domain.Domain.Sercurity
 {
-    public class CustomPrincipal : IPrincipal
+    public class CustomPrincipal 
     {
         public bool HasPermission(string permission)
         {

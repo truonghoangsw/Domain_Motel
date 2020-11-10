@@ -11,7 +11,7 @@ namespace Motel.Services.Lester
         void LockOut( int userId);
         void ResetAccount( int userId);
         Auth_User UserExists( string userName);
-        CustomPrincipal Login(string userName,string password);
+        LoginResutls Login(string userName,string password);
         RegistrationLeterReults Registration(RegistrationLesterRequest lesterModel);
     }
 }

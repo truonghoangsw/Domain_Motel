@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Motel.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Motel.Domain.Domain.Sercurity
 {
-    public class Auth_UserToken
+    public class Auth_UserToken:BaseEntity
     {
-        public int Id {get;set;}
         public string AccessTokenHash {get;set;}
         public DateTimeOffset AccessTokenExpiresDateTime {get;set;}
         public string RefreshTokenIdHash {get;set;}

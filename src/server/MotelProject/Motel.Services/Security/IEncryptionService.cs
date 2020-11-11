@@ -9,6 +9,8 @@ namespace Motel.Services.Security
     /// </summary>
     public interface IEncryptionService 
     {
+        string GetSha256Hash(string input);
+        Guid CreateCryptographicallySecureGuid();
         /// <summary>
         /// Create salt key
         /// </summary>

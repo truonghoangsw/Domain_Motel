@@ -1,4 +1,6 @@
-﻿using Motel.Domain;
+﻿using Motel.Core.Enum;
+using Motel.Domain;
+using Motel.Domain.Domain.Auth;
 using Motel.Domain.Domain.Sercurity;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,8 @@ namespace Motel.Services.Lester
 {
     public class LoginResutls
     {
+        public Auth_User User { get;set;}
         public CustomPrincipal customPrincipal { get;set;}
-        int MessageCode { get;set;}
+        public MessgeCodeRegistration MessageCode { get;set;}
     }
 }

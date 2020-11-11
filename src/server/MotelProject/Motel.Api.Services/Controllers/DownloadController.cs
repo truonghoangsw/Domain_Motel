@@ -88,7 +88,7 @@ namespace Motel.Api.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost]
+        [HttpGet]
         public virtual IActionResult GetFileUpload(Guid downloadId)
         {
             var download = _downloadService.GetDownloadByGuid(downloadId);

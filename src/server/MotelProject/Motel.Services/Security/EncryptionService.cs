@@ -13,7 +13,7 @@ namespace Motel.Services.Security
         #region Fields
 
         private readonly SecuritySettings _securitySettings;
-
+        private readonly RandomNumberGenerator _rand;
         #endregion
 
         #region Ctor
@@ -21,6 +21,7 @@ namespace Motel.Services.Security
         public EncryptionService(SecuritySettings securitySettings)
         {
             _securitySettings = securitySettings;
+            _rand = RandomNumberGenerator.Create();
         }
 
         #endregion
@@ -51,6 +52,21 @@ namespace Motel.Services.Security
         #endregion
 
         #region Methods
+
+        public string GetSha256Hash(string input)
+        {
+            using var hashAlgorithm = new SHA256CryptoServiceProvider();
+            var byteValue = Encoding.UTF8.GetBytes(input);
+            var byteHash = hashAlgorithm.ComputeHash(byteValue);
+            return Convert.ToBase64String(byteHash);
+        }
+
+        public Guid CreateCryptographicallySecureGuid()
+        {
+            var bytes = new byte[16];
+            _rand.GetBytes(bytes);
+            return new Guid(bytes);
+        }
 
         /// <summary>
         /// Create salt key

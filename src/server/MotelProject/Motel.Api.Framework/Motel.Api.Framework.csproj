@@ -7,17 +7,14 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Motel.Core\Motel.Core.csproj" />
     <ProjectReference Include="..\Motel.Domain\Motel.Domain.csproj" />
     <ProjectReference Include="..\Motel.Services\Motel.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-    <Folder Include="Jwt\" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using Autofac.Builder;
 using Autofac.Core;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Options;
 using Motel.Api.Framework;
 using Motel.Core;
 using Motel.Core.Caching;
@@ -21,6 +22,7 @@ using Motel.Services.Media;
 using Motel.Services.RentalPosting;
 using Motel.Services.Security;
 using Nop.Services.Configuration;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;

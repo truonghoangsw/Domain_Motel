@@ -21,8 +21,7 @@ namespace Motel.Services.Lester
         #region Fields
         private readonly IUserService _userService;
         private readonly IRolesUserServices _rolesUserServices;
-        private readonly IPermissionService permissionServices;
-        private readonly IWorkContext _workContext;
+        private readonly IPermissionService _permissionServices;
         private readonly IEncryptionService _encryptionService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<Lesters> _lestersRepository;
@@ -39,15 +38,14 @@ namespace Motel.Services.Lester
         {
             _userService = userService;
             _rolesUserServices = rolesUserServices;
-            this.permissionServices = permissionServices;
-            _workContext = workContext;
+            _permissionServices = permissionServices;
             _encryptionService = encryptionService;
             _eventPublisher = eventPublisher;
         }
         #endregion
 
         #region Utilities
-        RegistrationLeterReults IsValiDate(RegistrationLesterRequest lesterModel)
+        RegistrationLeterReults IsValiDateRegistration(RegistrationLesterRequest lesterModel)
         {
             RegistrationLeterReults result =new RegistrationLeterReults();
             result.MessageCode = MessgeCodeRegistration.IsValidate;
@@ -75,7 +73,28 @@ namespace Motel.Services.Lester
             }
             return result;
         }
-
+        LoginResutls IsValiLogin(string userName) 
+        {
+            LoginResutls result =new LoginResutls();
+            result.MessageCode = MessgeCodeRegistration.IsValidate;
+            var user =UserExists(userName);
+            if(user == null)
+            {
+                result.MessageCode = MessgeCodeRegistration.NotFoundName;
+                return result;
+            }
+            if(user.LockoutEnabled)
+            {
+                result.MessageCode = MessgeCodeRegistration.IsLockout;
+                return result;
+            }
+            if(user.Deleted == (int)EnumStatusUser.Delete)
+            {
+                result.MessageCode = MessgeCodeRegistration.IsDeleted;
+                return result;
+            }
+            return result;
+        }
         Auth_User CreateUserForLester(RegistrationLesterRequest lesterModel,string passwordHash)
         {
             var userNew = new Auth_User()
@@ -101,6 +120,14 @@ namespace Motel.Services.Lester
 
             return customPrincipal;
         }
+        (string salt,string passwordHash) CreatePassswordHash(string password)
+        {
+            string _passwordHash;
+            var saltKey = _encryptionService.CreateSaltKey(MotelUserServicesDefaults.PasswordSaltKeySize);
+            string _salt = saltKey;
+            _passwordHash = _encryptionService.CreatePasswordHash(password, saltKey, MotelUserServicesDefaults.DefaultHashedPasswordFormat);
+            return (_salt,_passwordHash);
+        }
         #endregion
 
         #region Methods
@@ -111,7 +138,19 @@ namespace Motel.Services.Lester
 
         public LoginResutls Login(string userName, string password)
         {
-            throw new NotImplementedException();
+            userName= userName?.Trim();
+            password= password?.Trim();
+            LoginResutls loginResutls = new LoginResutls();
+            var valResutls = IsValiLogin(userName);
+            if(valResutls.MessageCode != MessgeCodeRegistration.IsValidate)
+                return valResutls;
+            (string salt, string passwordHash) = CreatePassswordHash(password);
+            if(valResutls.User.PasswordHash != password)
+            {
+                valResutls.MessageCode = MessgeCodeRegistration.PasswordWrong;
+            }
+            loginResutls.customPrincipal =  GetInforAuthorize(valResutls.User);
+            return loginResutls;
         }
 
         public RegistrationLeterReults Registration(RegistrationLesterRequest lesterModel)
@@ -119,7 +158,7 @@ namespace Motel.Services.Lester
             RegistrationLeterReults result =new RegistrationLeterReults();
             if (lesterModel == null)
                 throw new ArgumentNullException(nameof(lesterModel));
-            var resultValidate = IsValiDate(lesterModel);
+            var resultValidate = IsValiDateRegistration(lesterModel);
             if(resultValidate.MessageCode != MessgeCodeRegistration.IsValidate)
                 return resultValidate;
             var lester = new Lesters()
@@ -130,8 +169,7 @@ namespace Motel.Services.Lester
                 Birthday = lesterModel.Birthday,
             };
             var saltKey = _encryptionService.CreateSaltKey(MotelUserServicesDefaults.PasswordSaltKeySize);
-            lester.Salt = saltKey;
-            lester.Password = _encryptionService.CreatePasswordHash(lesterModel.Password, saltKey, MotelUserServicesDefaults.DefaultHashedPasswordFormat);
+            (lester.Salt,lester.Password) = CreatePassswordHash(lester.Password);
             var resultUser = CreateUserForLester(lesterModel,lester.Password);
             if(resultUser == null)
             {

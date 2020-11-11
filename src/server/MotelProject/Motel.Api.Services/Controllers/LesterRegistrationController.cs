@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Motel.Services.Lester;
+using Motel.Services.Security;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,9 +15,16 @@ namespace Motel.Api.Services.Controllers
     public class LesterRegistrationController : ControllerBase
     {
         #region Fields
+        protected readonly ILesterRegistrationService _lesterRegistration;
+        protected readonly IUserService _userService;
+        protected readonly IPermissionService _permissionService;
+        protected readonly IPermissionService _permissionService;
 
         #endregion
+        public LesterRegistrationController()
+        {
 
+        }
         #region Ctor
         
         #endregion

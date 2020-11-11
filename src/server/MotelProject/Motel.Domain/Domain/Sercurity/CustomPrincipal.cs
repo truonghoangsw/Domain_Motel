@@ -6,8 +6,13 @@ using System.Text;
 
 namespace Motel.Domain.Domain.Sercurity
 {
-    public class CustomPrincipal 
+    public class CustomPrincipal : IPrincipal
     {
+        public IIdentity Identity { get; private set; }
+        public CustomPrincipal(string Username)
+        {
+            this.Identity = new GenericIdentity(Username);
+        }
         public bool HasPermission(string permission)
         {
             if (Permissions.Any(r => permission.Contains(r)))

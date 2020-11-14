@@ -1,5 +1,5 @@
 ﻿
-	CREATE TABLE [Auth].[Auth_UserRoles](
+	CREATE TABLE [dbo].[Auth_UserRoles](
 		[UserID] [int] NOT NULL,
 		[RoleID] [int] NOT NULL,
 	 [Id] INT NOT NULL IDENTITY, 

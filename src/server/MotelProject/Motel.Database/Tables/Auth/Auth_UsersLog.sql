@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Auth].[Auth_UsersLog]
+﻿CREATE TABLE [dbo].[Auth_UsersLog]
 (
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[EventID] [int] NOT NULL,

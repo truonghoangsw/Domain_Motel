@@ -18,6 +18,6 @@
 	[StatusId] [tinyint] NULL,
 	[UserId] [int] Not Null, 
     [TerritoriesId] INT NULL, 
-    CONSTRAINT [FK_Retener_Auth_User] FOREIGN KEY (UserId) REFERENCES [Auth].[Auth_User]([Id]),
+    CONSTRAINT [FK_Retener_Auth_User] FOREIGN KEY (UserId) REFERENCES [dbo].[Auth_User]([Id]),
 	CONSTRAINT [FK_Retener_Territories] FOREIGN KEY (TerritoriesId) REFERENCES Territories([Id])
 )

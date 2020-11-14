@@ -19,40 +19,40 @@ namespace Motel.Services.RentalPosting
 {
     public class RentalPostService : IRentalPostService
     {
-        #region Fields
+        //#region Fields
 
-        protected readonly ICacheKeyService _cacheKeyService;
-        protected readonly IEventPublisher _eventPublisher;
-        protected readonly IRepository<PostComment> _postCommentRepository;
-        protected readonly IRepository<PostCategoryMapping> _postCategoryRepository;
-        protected readonly IRepository<PostPictureMaping> _postPictureRepository;
-        protected readonly IPermissionService permission;
-        protected readonly IPictureService _pictureService;
-        protected readonly ILogger _logger;
-        protected readonly IRepository<RentalPost> _rentalPostRepository;
-        protected readonly IStaticCacheManager _staticCacheManager;
-        protected readonly IWorkContext _workContext;
+        //protected readonly ICacheKeyService _cacheKeyService;
+        //protected readonly IEventPublisher _eventPublisher;
+        //protected readonly IRepository<PostComment> _postCommentRepository;
+        //protected readonly IRepository<PostCategoryMapping> _postCategoryRepository;
+        //protected readonly IRepository<PostPictureMaping> _postPictureRepository;
+        //protected readonly IPermissionService permission;
+        //protected readonly IPictureService _pictureService;
+        //protected readonly ILogger _logger;
+        //protected readonly IRepository<RentalPost> _rentalPostRepository;
+        //protected readonly IStaticCacheManager _staticCacheManager;
+        //protected readonly IWorkContext _workContext;
 
 
-        #endregion
+        //#endregion
 
         #region Ctor
-        public RentalPostService(ICacheKeyService cacheKeyService,IEventPublisher eventPublisher,IWorkContext workContext,
-            IPictureService pictureService,IRepository<PostCategoryMapping> postCategoryRepository,IRepository<PostPictureMaping> postPictureRepository,
-            IRepository<PostComment> postCommentRepository, IRepository<RentalPost> rentalPostRepository
-            ,IStaticCacheManager staticCacheManager,ILogger logger)
-        {
-            _logger = logger;
-            _postCategoryRepository = postCategoryRepository;
-            _cacheKeyService = cacheKeyService;
-            _eventPublisher = eventPublisher;
-            _postCommentRepository = postCommentRepository;
-            _rentalPostRepository = rentalPostRepository;
-            _staticCacheManager = staticCacheManager;
-            _pictureService = pictureService;
-            _workContext = workContext;
-            _postPictureRepository = postPictureRepository;
-        }
+        //public RentalPostService(ICacheKeyService cacheKeyService,IEventPublisher eventPublisher,IWorkContext workContext,
+        //    IPictureService pictureService,IRepository<PostCategoryMapping> postCategoryRepository,IRepository<PostPictureMaping> postPictureRepository,
+        //    IRepository<PostComment> postCommentRepository, IRepository<RentalPost> rentalPostRepository
+        //    ,IStaticCacheManager staticCacheManager,ILogger logger)
+        //{
+        //    _logger = logger;
+        //    _postCategoryRepository = postCategoryRepository;
+        //    _cacheKeyService = cacheKeyService;
+        //    _eventPublisher = eventPublisher;
+        //    _postCommentRepository = postCommentRepository;
+        //    _rentalPostRepository = rentalPostRepository;
+        //    _staticCacheManager = staticCacheManager;
+        //    _pictureService = pictureService;
+        //    _workContext = workContext;
+        //    _postPictureRepository = postPictureRepository;
+        //}
         #endregion
 
         //#region Post Rentel

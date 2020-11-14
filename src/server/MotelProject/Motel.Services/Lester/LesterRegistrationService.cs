@@ -13,6 +13,7 @@ namespace Motel.Services.Lester
     using Motel.Domain.ContextDataBase;
     using Motel.Domain.Domain.Lester;
     using Motel.Domain.Domain.Sercurity;
+    using Motel.Services.Logging;
     using System.Linq;
 
     public class LesterRegistrationService : ILesterRegistrationService
@@ -21,26 +22,26 @@ namespace Motel.Services.Lester
         #region Fields
         private readonly IUserService _userService;
         private readonly IRolesUserServices _rolesUserServices;
-        private readonly IPermissionService _permissionServices;
         private readonly IEncryptionService _encryptionService;
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<Lesters> _lestersRepository;
+        private readonly ILogger _logger;
+
         #endregion
 
         #region Ctor
         public LesterRegistrationService(
             IUserService userService, 
             IRolesUserServices rolesUserServices, 
-            IPermissionService permissionServices, 
             IWorkContext workContext, 
             IEncryptionService encryptionService, 
-            IEventPublisher eventPublisher)
+           IRepository<Lesters> lestersRepository,
+           ILogger logger)
         {
+            _logger = logger;
+            _lestersRepository = lestersRepository;
             _userService = userService;
             _rolesUserServices = rolesUserServices;
-            _permissionServices = permissionServices;
             _encryptionService = encryptionService;
-            _eventPublisher = eventPublisher;
         }
         #endregion
 
@@ -55,11 +56,11 @@ namespace Motel.Services.Lester
                 result.MessageCode = MessgeCodeRegistration.ExistName;
                 return result;
             }
-            if (!CommonHelper.IsValidEmail(lesterModel.Email))
-            {
-                result.MessageCode = MessgeCodeRegistration.AccountEmailWrong;
-                return result;
-            }
+            //if (!CommonHelper.IsValidEmail(lesterModel.Email))
+            //{
+            //    result.MessageCode = MessgeCodeRegistration.AccountEmailWrong;
+            //    return result;
+            //}
             var userEmail =_userService.GetUserByEmail(lesterModel.Email);
             if(userEmail != null)
             {
@@ -112,6 +113,7 @@ namespace Motel.Services.Lester
         {
             CustomPrincipal customPrincipal = new CustomPrincipal()
             {
+                UserId = user.Id,
                 Avatar = user.Avatar,
                 FullName = user.UserName,
                 Roles = _rolesUserServices.GetNameRoles(user.Id)?.ToArray(),
@@ -127,6 +129,52 @@ namespace Motel.Services.Lester
             string _salt = saltKey;
             _passwordHash = _encryptionService.CreatePasswordHash(password, saltKey, MotelUserServicesDefaults.DefaultHashedPasswordFormat);
             return (_salt,_passwordHash);
+        }
+        LoginResutls LoginFacebook(Lesters lesters)
+        {
+            LoginResutls resutls = new LoginResutls();
+            var user = _userService.GetUserById(lesters.UserId);
+            if(user == null)
+            {
+                resutls.MessageCode = MessgeCodeRegistration.Error;
+                return resutls;
+            }
+            resutls.User = user;
+            resutls.customPrincipal = GetInforAuthorize(user);
+            resutls.MessageCode = MessgeCodeRegistration.Suscess;
+            return resutls;
+        }
+        
+        LoginResutls registrationFacebook(RequestLoginFacebook loginFacebook)
+        {
+            string randomPass = CommonHelper.GenerateRandomPassword(10);
+            RegistrationLesterRequest registrationLesterRequest = new RegistrationLesterRequest()
+            {
+                FacebookId = loginFacebook.facebookId,
+                Password = randomPass,
+                Email = loginFacebook.email,
+                FullName = loginFacebook.name,
+                PhoneNumber = loginFacebook.phone,
+                UserName = loginFacebook.name
+            };
+            var resultRegistration = Registration(registrationLesterRequest);
+            int userId = resultRegistration.Lesters == null ? 0:resultRegistration.Lesters.UserId;
+            if(userId == 0)
+            {
+                return new LoginResutls()
+                {
+                    customPrincipal = resultRegistration.customPrincipal,
+                    MessageCode = resultRegistration.MessageCode,
+                };
+            }
+            var user = _userService.GetUserById(userId);
+            LoginResutls loginResutls = new LoginResutls()
+            {
+                customPrincipal = resultRegistration.customPrincipal,
+                MessageCode = resultRegistration.MessageCode,
+                User = user
+            };
+            return loginResutls;
         }
         #endregion
 
@@ -163,6 +211,8 @@ namespace Motel.Services.Lester
                 return resultValidate;
             var lester = new Lesters()
             { 
+                FacebookId = lesterModel.FacebookId,
+                FullName = lesterModel.FullName,
                 IdentityCard = lesterModel.IdentityCard,
                 IdentityDay  = lesterModel.IdentityDay,
                 AccountName = lesterModel.UserName,
@@ -180,6 +230,7 @@ namespace Motel.Services.Lester
             _lestersRepository.Insert(lester);
             result.Lesters = lester;
             result.customPrincipal = GetInforAuthorize(resultUser);
+            result.MessageCode = MessgeCodeRegistration.Suscess;
             return result;
         }
 
@@ -193,8 +244,38 @@ namespace Motel.Services.Lester
             return  _userService.GetUserByUsername(userName);
         }
 
-       
+        public LoginResutls RegistrationFacebook(RequestLoginFacebook loginFacebook)
+        {
+            LoginResutls loginResutls = new LoginResutls();
+            if (loginFacebook == null)
+                throw new ArgumentNullException(nameof(loginFacebook));
+            var lester = GetFacebookId(loginFacebook.facebookId);
+            if(lester != null)
+            {
+                loginResutls = LoginFacebook(lester);
+            }
+            else
+            {
+                loginResutls = registrationFacebook(loginFacebook);
+            }
+            return loginResutls;
+        }
 
+        public Lesters GetFacebookId(string facebookId)
+        {
+            try
+            {
+                var lester = _lestersRepository.Table.FirstOrDefault(x=>x.FacebookId == facebookId);
+                return lester;
+            }
+            catch (Exception ex)
+            {
+
+                _logger.Error("GetFacebookId error",ex);
+                return null;
+            }
+           
+        }
         #endregion
     }
 }

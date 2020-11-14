@@ -7,7 +7,6 @@ namespace Motel.Services.RentalPosting
     public interface ICategoryService
     {
         IList<Category> GetAllCategoriesDisplayedOnHomepage(bool showHidden = false);
-
         void DeletePostCategory(PostCategoryMapping productCategory);
         void DeleteCategories(IList<Category> categories);
         void UpdateCategory(Category category);

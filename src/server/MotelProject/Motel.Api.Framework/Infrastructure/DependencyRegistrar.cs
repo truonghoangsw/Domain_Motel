@@ -4,6 +4,7 @@ using Autofac.Core;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
 using Motel.Api.Framework;
+using Motel.Api.Framework.Jwt;
 using Motel.Core;
 using Motel.Core.Caching;
 using Motel.Core.Configuration;
@@ -17,6 +18,7 @@ using Motel.Services.Authentication;
 using Motel.Services.Caching;
 using Motel.Services.Configuration;
 using Motel.Services.Events;
+using Motel.Services.Lester;
 using Motel.Services.Logging;
 using Motel.Services.Media;
 using Motel.Services.RentalPosting;
@@ -43,26 +45,50 @@ namespace Motel.Api.Infrastructure
             builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
             builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
 
-          
+
             //data layer
-           //data layer
+            //data layer
+            #region data layer
             builder.RegisterType<DataProviderManager>().As<IDataProviderManager>().InstancePerDependency();
             builder.Register(context => context.Resolve<IDataProviderManager>().DataProvider).As<IMotelDataProvider>().InstancePerDependency();
-             builder.RegisterType<MigrationManager>().As<IMigrationManager>().InstancePerDependency();
-            
-            //repositories
-            builder.RegisterGeneric(typeof(EntityRepository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
+            builder.RegisterType<MigrationManager>().As<IMigrationManager>().InstancePerDependency();
+            builder.RegisterType<DataProviderManager>().As<IDataProviderManager>().InstancePerDependency();
+            #endregion
 
+            //repositories
+            #region repositories
+            builder.RegisterGeneric(typeof(EntityRepository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
+            #endregion
+
+            #region Meida
             builder.RegisterType<DownloadService>().As<IDownloadService>().InstancePerLifetimeScope();
+            builder.RegisterType<PictureService>().As<IPictureService>().InstancePerLifetimeScope();
+
+            #endregion
+
+            #region Auth
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
             builder.RegisterType<PermissionService>().As<IPermissionService>().InstancePerLifetimeScope();
             builder.RegisterType<RolesUserServices>().As<IRolesUserServices>().InstancePerLifetimeScope();
             builder.RegisterType<CookieAuthenticationService>().As<IAuthenticationService>().InstancePerLifetimeScope();
-            builder.RegisterType<DataProviderManager>().As<IDataProviderManager>().InstancePerDependency();
+            builder.RegisterType<EncryptionService>().As<IEncryptionService>().InstancePerLifetimeScope();
+            #endregion
+             
+            #region Lester
+            builder.RegisterType<LesterRegistrationService>().As<ILesterRegistrationService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<TokenStoreService>().As<ITokenStoreService>().InstancePerLifetimeScope();
+            builder.RegisterType<TokenFactoryService>().As<ITokenFactoryService>().InstancePerLifetimeScope();
+            #endregion
+
+            #region Post
             builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerDependency();
+            builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerDependency();
+            #endregion
+
+            #region Cache and event
             builder.RegisterType<EventPublisher>().As<IEventPublisher>().InstancePerDependency();
             builder.RegisterType<CacheKeyService>().As<ICacheKeyService>().InstancePerLifetimeScope();
-            builder.RegisterType<PictureService>().As<IPictureService>().InstancePerLifetimeScope();
             if (config.RedisEnabled)
             {
                 builder.RegisterType<RedisConnectionWrapper>()
@@ -71,13 +97,7 @@ namespace Motel.Api.Infrastructure
                     .SingleInstance();
             }
             builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
-
-            builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
-            builder.RegisterType<SettingService>().As<ISettingService>().InstancePerLifetimeScope();
-            builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
-            builder.RegisterType<ActionContextAccessor>().As<IActionContextAccessor>().InstancePerLifetimeScope();
-            builder.RegisterType<CacheKeyService>().As<ICacheKeyService>().InstancePerLifetimeScope();
-            builder.RegisterSource(new SettingsSource());
+            
             builder.Register(context => context.Resolve<IDataProviderManager>().DataProvider).As<IMotelDataProvider>().InstancePerDependency();
             if (config.RedisEnabled)
             {
@@ -97,6 +117,20 @@ namespace Motel.Api.Infrastructure
                     }, typeof(IConsumer<>)))
                     .InstancePerLifetimeScope();
             }
+            #endregion
+
+            #region Common
+            builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
+            builder.RegisterType<SettingService>().As<ISettingService>().InstancePerLifetimeScope();
+            builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
+            builder.RegisterType<ActionContextAccessor>().As<IActionContextAccessor>().InstancePerLifetimeScope();
+            builder.RegisterType<CacheKeyService>().As<ICacheKeyService>().InstancePerLifetimeScope();
+            builder.RegisterSource(new SettingsSource());
+            #endregion
+
+
+          
+         
 
         }
     }

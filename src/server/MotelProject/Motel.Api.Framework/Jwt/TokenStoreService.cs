@@ -31,13 +31,15 @@ namespace Motel.Api.Framework.Jwt
             IUserService userServices,
             IStaticCacheManager staticCacheManager,
             ITokenFactoryService tokenFactoryService,
-            IEncryptionService encryptionService
+            IEncryptionService encryptionService,
+            IOptionsSnapshot<BearerTokensOptions> configuration
         ){
             _tokenUserRepository = tokenUserRepository;
             _userServices = userServices;
             _staticCacheManager = staticCacheManager;
             _tokenFactoryService = tokenFactoryService;
             _encryptionService=encryptionService;
+            _configuration = configuration;
         }
 
     

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
 namespace Motel.Core.Enum
 {
+    using System;
+
     public enum MessgeCodeRegistration
     {
         [Description("Thực hiện thành công")]
@@ -32,7 +33,8 @@ namespace Motel.Core.Enum
 
         [Description("Đã bị khóa")]
         IsLockout = -88,
-        
+        [Description("Không có dữ liệu")]
+        NoData = -66,
         [Description("Thực hiện thất bại")]
         Error = -99,
     }

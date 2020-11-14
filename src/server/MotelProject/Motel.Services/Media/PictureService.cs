@@ -28,6 +28,7 @@ namespace Motel.Services.Media
      public partial class PictureService : IPictureService
     {
         #region Fields
+        public static bool StoreInDb = false;
         private readonly ISettingService _settingService;
         private readonly IMotelDataProvider _dataProvider;
         private readonly IDownloadService _downloadService;
@@ -983,14 +984,12 @@ namespace Motel.Services.Media
         {
             using var image = Image.Load<Rgba32>(pictureBinary, out var imageFormat);
             //resize the image in accordance with the maximum size
-            if (Math.Max(image.Height, image.Width) > _mediaSettings.MaximumImageSize)
-            {
+           
                 image.Mutate(imageProcess => imageProcess.Resize(new ResizeOptions
                 {
                     Mode = ResizeMode.Max,
-                    Size = new Size(_mediaSettings.MaximumImageSize)
+                    Size = new Size(Math.Max(image.Height, image.Width))
                 }));
-            }
 
             return EncodeImage(image, imageFormat);
         }
@@ -1041,71 +1040,7 @@ namespace Motel.Services.Media
         /// <summary>
         /// Gets or sets a value indicating whether the images should be stored in data base.
         /// </summary>
-        public virtual bool StoreInDb
-        {
-            get => _settingService.GetSettingByKey("Media.Images.StoreInDB", true);
-            set
-            {
-                //check whether it's a new value
-                if (StoreInDb == value)
-                    return;
-
-                //save the new setting value
-                _settingService.SetSetting("Media.Images.StoreInDB", value);
-
-                var pageIndex = 0;
-                const int pageSize = 400;
-                try
-                {
-                    while (true)
-                    {
-                        var pictures = GetPictures(pageIndex: pageIndex, pageSize: pageSize);
-                        pageIndex++;
-
-                        //all pictures converted?
-                        if (!pictures.Any())
-                            break;
-
-                        foreach (var picture in pictures)
-                        {
-                            if (!string.IsNullOrEmpty(picture.VirtualPath))
-                                continue;
-
-                            var pictureBinary = LoadPictureBinary(picture, !value);
-
-                            //we used the code below before. but it's too slow
-                            //let's do it manually (uncommented code) - copy some logic from "UpdatePicture" method
-                            /*just update a picture (all required logic is in "UpdatePicture" method)
-                            we do not validate picture binary here to ensure that no exception ("Parameter is not valid") will be thrown when "moving" pictures
-                            UpdatePicture(picture.Id,
-                                          pictureBinary,
-                                          picture.MimeType,
-                                          picture.SeoFilename,
-                                          true,
-                                          false);*/
-                            if (value)
-                                //delete from file system. now it's in the database
-                                DeletePictureOnFileSystem(picture);
-                            else
-                                //now on file system
-                                SavePictureInFile(picture.Id, pictureBinary, picture.MimeType);
-                            //update appropriate properties
-                            UpdatePictureBinary(picture, value ? pictureBinary : Array.Empty<byte>());
-                            picture.IsNew = true;
-                            //raise event?
-                            //_eventPublisher.EntityUpdated(picture);
-                        }
-
-                        //save all at once
-                        _pictureRepository.Update(pictures);
-                    }
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-        }
+     
 
         #endregion
     }

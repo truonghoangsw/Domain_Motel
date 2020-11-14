@@ -22,7 +22,6 @@ namespace Motel.Services.Security
         private readonly UserSettings _userSettings;
         private readonly ICacheKeyService _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
-        private readonly IPermissionService _permissionService;
         private readonly IRepository<Auth_User> _userRepository;
         private readonly IRolesUserServices _rolesServices;
         private readonly IRepository<Auth_UserRoles> _userRolesMappingRepository;
@@ -35,7 +34,6 @@ namespace Motel.Services.Security
         #region Ctor
         public UserService(CachingSettings cachingSettings,
             UserSettings userSettings,
-            IPermissionService permissionService,
             ICacheKeyService cacheKeyService,
             IRepository<Auth_Assign> permissionAssign,
             IEventPublisher eventPublisher,
@@ -52,7 +50,6 @@ namespace Motel.Services.Security
             _userRolesMappingRepository = userRolesMappingRepository;
             _userRepository = userRepository;
             _staticCacheManager = staticCacheManager;
-            _permissionService= permissionService;
             _logger = logger;
             _permissionAssign = permissionAssign;
             _dataProvider = dataProvider;
@@ -163,6 +160,7 @@ namespace Motel.Services.Security
         {
             try
             {
+                user.Deleted = 0;
                 user.CreatedTime = DateTime.Now;
                 user.Status = (int)EnumStatusUser.Approved;
                 _userRepository.Insert(user);
@@ -314,20 +312,23 @@ namespace Motel.Services.Security
         #region User Permisson
         public IList<Auth_Assign> GetAllPermissonOfUser(int Id)
         {
-           var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllowedCacheKey, ObjectTypeEnum.User,Id);
-
-             var query = from pa in _permissionAssign.Table
-                where pa.ObjectID == Id && pa.ObjectType == (int)ObjectTypeEnum.User
-                select pa;
-
-            return query.ToCachedList(key);
+            var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllowedCacheKey, ObjectTypeEnum.User,Id);
+            var pObjectType =  SqlParameterHelper.GetInt32Parameter("@_ObjectType",(int)ObjectTypeEnum.User);
+            var pUserId=  SqlParameterHelper.GetInt32Parameter("@_Id", Id);
+             var permission = _permissionAssign.EntityFromSql("GetAllPermissonOfUser",pObjectType,pUserId);
+            return _staticCacheManager.Get(key,() => permission);
         }
         public IList<Auth_Assign> GetAllPermissonOfUser(Auth_User user)
         {
             return GetAllPermissonOfUser(user.Id);
         }
 
-       
+        public Auth_User GetUserById(int Id)
+        {
+           return _userRepository.GetById(Id);
+        }
+
+
 
         #endregion
     }

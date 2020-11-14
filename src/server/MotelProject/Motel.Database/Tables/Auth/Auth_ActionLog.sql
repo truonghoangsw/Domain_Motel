@@ -1,5 +1,5 @@
 ﻿
-CREATE TABLE [Auth].[Auth_ActionLog](
+CREATE TABLE [dbo].[Auth_ActionLog](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Action] [nvarchar](128) NOT NULL,
 	[UserID] [int] NOT NULL,

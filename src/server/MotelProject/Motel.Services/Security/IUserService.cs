@@ -51,7 +51,7 @@ namespace Motel.Services.Security
             string lastName = null, int dayOfBirth = 0, int monthOfBirth = 0,string phone = null, string zipPostalCode = null, string ipAddress = null, int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
  
         Auth_User GetUserByUsername(string username);
-
+        Auth_User GetUserById(int Id);
         Auth_User GetUserByEmail(string email);
         void UpdateCustomerPassword(UserPassword UserPassword);
 

@@ -27,7 +27,10 @@ namespace Motel.Core
         #endregion
 
         #region Methods
-
+        public static DateTime DateTimeDefault()
+        {
+            return new DateTime(1990,01,01);
+        }
         /// <summary>
         /// Ensures the subscriber email or throw.
         /// </summary>
@@ -46,7 +49,15 @@ namespace Motel.Core
 
             return output;
         }
+         public static string DescriptionEnum(System.Enum value )
+        {
+            // get attributes  
+            var field = value.GetType().GetField( value.ToString() );
+            var attributes = field.GetCustomAttributes( typeof( DescriptionAttribute ), false );
 
+            // return description
+            return attributes.Any() ? ( (DescriptionAttribute)attributes.ElementAt( 0 ) ).Description : "Description Not Found";
+        }
         /// <summary>
         /// Verifies that a string is in valid e-mail format
         /// </summary>
@@ -72,6 +83,18 @@ namespace Motel.Core
             return IPAddress.TryParse(ipAddress, out var _);
         }
 
+        /// <summary>
+        /// Generate random digit code
+        /// </summary>
+        /// <param name="length">Length</param>
+        /// <returns>Result string</returns>
+        public static string GenerateRandomPassword(int length)
+        {
+            using var random = new SecureRandomNumberGenerator();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
         /// <summary>
         /// Generate random digit code
         /// </summary>

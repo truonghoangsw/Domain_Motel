@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Auth].[Auth_Permission]
+﻿CREATE TABLE [dbo].[Auth_Permission]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[Permission] [nvarchar](50) NOT NULL,

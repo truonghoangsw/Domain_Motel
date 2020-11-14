@@ -8,14 +8,16 @@ namespace Motel.Services.Security.Caching
 {
     public class UserRoleMappingEventConsumer:CacheEventConsumer<Auth_UserRoles>
     {
-        public UserRoleMappingEventConsumer(Auth_UserRoles auth_UserRole)
+        protected override void ClearCache(Auth_UserRoles auth_UserRole)
         {
-            var keyIds = _cacheKeyService.PrepareKey(MotelUserServicesDefaults.UserRoleIdsCacheKey, auth_UserRole.UserID);
+           var keyIds = _cacheKeyService.PrepareKey(MotelUserServicesDefaults.UserRoleIdsCacheKey, auth_UserRole.UserID);
             var keyObjec = _cacheKeyService.PrepareKey(MotelUserServicesDefaults.UserRolesByObjectCacheKey, auth_UserRole.UserID);
             var keyNameRoles =  _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.RolesAllowedCacheKey, auth_UserRole.UserID);;
             Remove(keyNameRoles);
             Remove(keyIds);
             Remove(keyObjec);
+            
         }
+       
     }
 }

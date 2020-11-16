@@ -74,7 +74,7 @@ namespace Motel.Services.RentalPosting
             _eventPublisher.EntityDeleted(productCategory);
         }
 
-        public IPagedList<Category> GetAllCategories(string categoryName, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, bool? overridePublished = null)
+        public IPagedList<Category> GetAllCategories(string categoryName, int? pageIndex = 0, int? pageSize = int.MaxValue, bool showHidden = false, bool? overridePublished = null)
         {
             var query = _categoryRepository.Table;
             if (!showHidden)
@@ -89,7 +89,7 @@ namespace Motel.Services.RentalPosting
 
             var unsortedCategories = query.ToList();
 
-            return new PagedList<Category>(unsortedCategories, pageIndex, pageSize);
+            return new PagedList<Category>(unsortedCategories, pageIndex.Value, pageSize.Value);
 
         }
 

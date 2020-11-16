@@ -26,8 +26,12 @@ namespace Motel.Services.Territories
         #endregion
 
         #region Ctor
-        public TerritoriesServices(IRepository<Territories> territoriesRepository, IStaticCacheManager staticCacheManager, IEventPublisher eventPublisher)
+        public TerritoriesServices(IRepository<Territories> territoriesRepository,
+            ICacheKeyService cacheKeyService,
+            IStaticCacheManager staticCacheManager, 
+            IEventPublisher eventPublisher)
         {
+            _cacheKeyService = cacheKeyService;
             _territoriesRepository = territoriesRepository;
             _staticCacheManager = staticCacheManager;
             _eventPublisher = eventPublisher;
@@ -73,13 +77,13 @@ namespace Motel.Services.Territories
             return _staticCacheManager.Get(key,() => GetAllFilter().ToList() ) ;
         }
 
-        public IPagedList<Territories> GetAllFilter( bool? OrderIndex =false,int? StatusId = 0,
-            string Name= "",  int PageIndex=0, int PageSize = int.MaxValue)
+        public IPagedList<Territories> GetAllFilter( bool? OrderIndex =null,int? StatusId = null,
+            string Name=default(string),  int PageIndex=0, int PageSize = int.MaxValue)
         {
             var query = _territoriesRepository.Table;
             if(StatusId.HasValue)
                 query = query.Where(x=>x.Status == StatusId);
-            if(string.IsNullOrEmpty(Name))
+            if(!string.IsNullOrWhiteSpace(Name))
                 query = query.Where(x=>x.Name.Contains(Name));
             query = query.Distinct();
             var unsortedTerritories = query.ToList();
@@ -87,8 +91,8 @@ namespace Motel.Services.Territories
             return new PagedList<Territories>(unsortedTerritories, PageIndex, PageSize);
         }
 
-        public IPagedList<Territories> GetAllParent(string Name, int? StatusId, int? ParentId, 
-            bool? OrderIndex, bool? LevelObject, int? PageIndex = 0, int? PageSize = int.MaxValue)
+        public IPagedList<Territories> GetAllParent(int? ParentId ,int? StatusId = null, 
+            int? PageIndex = 0, int? PageSize = int.MaxValue,string Name ="")
         {
             var query = _territoriesRepository.Table;
             if(StatusId.HasValue)

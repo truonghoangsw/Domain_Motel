@@ -88,7 +88,6 @@ namespace Motel.Api.Services.Controllers
             return Ok(pictures);
         }
         #endregion
-
        
     }
 }

@@ -13,6 +13,7 @@
     <Folder Include="Lester\Caching\" />
     <Folder Include="Retener\Caching\" />
     <Folder Include="Territories\Caching\" />
+    <Folder Include="UtilitiesRoom\Caching\" />
   </ItemGroup>
 
   <ItemGroup>

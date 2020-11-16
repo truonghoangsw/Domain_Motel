@@ -23,6 +23,8 @@ using Motel.Services.Logging;
 using Motel.Services.Media;
 using Motel.Services.RentalPosting;
 using Motel.Services.Security;
+using Motel.Services.Territories;
+using Motel.Services.UtilitiesRoom;
 using Nop.Services.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -82,8 +84,11 @@ namespace Motel.Api.Infrastructure
             #endregion
 
             #region Post
+            builder.RegisterType<RentalPostService>().As<IRentalPostService>().InstancePerDependency();
+
             builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerDependency();
-            builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerDependency();
+            builder.RegisterType<TerritoriesServices>().As<ITerritoriesServices>().InstancePerDependency();
+             builder.RegisterType<UtilitiesRoomServices>().As<IUtilitiesRoomServices>().InstancePerDependency();
             #endregion
 
             #region Cache and event

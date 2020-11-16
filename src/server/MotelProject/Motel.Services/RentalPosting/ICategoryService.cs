@@ -14,7 +14,7 @@ namespace Motel.Services.RentalPosting
         Category GetCategoryById(int categoryId);
 
          IPagedList<Category> GetAllCategories(string categoryName, 
-            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, bool? overridePublished = null);
+            int? pageIndex = 0, int? pageSize = int.MaxValue, bool showHidden = false, bool? overridePublished = null);
         IList<Category> GetAllCategories(bool showHidden = false);
 
         void DeleteCategory(Category category);

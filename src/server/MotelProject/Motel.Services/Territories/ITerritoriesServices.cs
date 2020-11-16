@@ -10,8 +10,8 @@ namespace Motel.Services.Territories
         IList<Territories> GetAll();
         IPagedList<Territories> GetAllFilter( bool? OrderIndex =false,int? StatusId = 0,
             string Name= "",  int PageIndex=0, int PageSize = int.MaxValue);
-        IPagedList<Territories> GetAllParent(string Name, int? StatusId, int? ParentId, 
-            bool? OrderIndex, bool? LevelObject, int? PageIndex = 0, int? PageSize = int.MaxValue);
+        IPagedList<Territories> GetAllParent(int? ParentId ,int? StatusId = null, 
+            int? PageIndex = 0, int? PageSize = int.MaxValue,string Name ="");
         Territories GetById(int id);
         void Create(Territories territories);
         void Edit(Territories territories);

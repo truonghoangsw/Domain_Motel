@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Motel.Api.Framework.Jwt;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Motel.Api.Framework.Infrastructure
 {
@@ -28,7 +29,7 @@ namespace Motel.Api.Framework.Infrastructure
                 {
                     return bearerTokens.AccessTokenExpirationMinutes < bearerTokens.RefreshTokenExpirationMinutes;
                 }, "RefreshTokenExpirationMinutes is less than AccessTokenExpirationMinutes. Obtaining new tokens using the refresh token should happen only if the access token has expired.");
-            services.AddControllers();
+            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
     }
 }

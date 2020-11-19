@@ -7,6 +7,7 @@ namespace Motel.Services.Territories
     
     public interface ITerritoriesServices
     {
+        IList<Territories> GetAllByName(string nameAdrress);
         IList<Territories> GetAll();
         IPagedList<Territories> GetAllFilter( bool? OrderIndex =false,int? StatusId = 0,
             string Name= "",  int PageIndex=0, int PageSize = int.MaxValue);

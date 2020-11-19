@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Motel.Api.Framework.Request;
 using Motel.Api.Framework.Response;
 using Motel.Core;
 using Motel.Core.Enum;
 using Motel.Domain.Domain.Post;
 using Motel.Services.Logging;
+using Motel.Services.Media;
 using Motel.Services.RentalPosting;
+using Motel.Services.Territories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,15 +23,17 @@ namespace Motel.Api.Services.Controllers
     {
         #region Fields
         private IRentalPostService _rentalPostService { get; set;}
+        private ITerritoriesServices _territoriesServices { get; set;}
+         private IPictureService _pictruetService { get; set;}
         private ILogger _logger { get; set;}
         #endregion
 
         #region Ctor
-        public PostRentalController(
-            IRentalPostService rentalPostService,
-            ILogger logger
-        ){
+        public PostRentalController(IRentalPostService rentalPostService, ITerritoriesServices territoriesServices, IPictureService pictruetService, ILogger logger)
+        {
             _rentalPostService = rentalPostService;
+            _territoriesServices = territoriesServices;
+            _pictruetService = pictruetService;
             _logger = logger;
         }
         #endregion
@@ -36,36 +41,75 @@ namespace Motel.Api.Services.Controllers
         #region Method
         // GET: api/<PostRentalController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IPagedList<RentalPost> Get([FromQuery]RequesPost  filter)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                if(filter == null)
+                {
+                    _logger.Warning("Get RentalPost filternull");
+                    return new PagedList<RentalPost>();
+                }
+                var lst= _rentalPostService.GetList(filter.TitlePost,filter.ToMonthlyPrice,
+                    filter.FromMonthlyPrice,filter.NumberRoom,filter.Address,
+                    filter.PageIndex,filter.PageSize).ToList();
+                lst.ForEach(x =>
+                {
+                    x.UtilitiesRooms = _rentalPostService.GetUtilitiesOfPost(x.Id);
+                    x.PostPictures = _rentalPostService.GetImageOfPost(x.Id);
+                });
+                return  new PagedList<RentalPost>(lst,filter.PageIndex.Value,filter.PageSize.Value);
+            }
+            catch (Exception ex) 
+            {
+                _logger.Error("Get RentalPost error",ex);
+                return new PagedList<RentalPost>();
+            }
         }
 
         // GET api/<PostRentalController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ResponseDetailPage Get(int id)
         {
-            return "value";
+            ResponseDetailPage response = new ResponseDetailPage();
+            var entity = _rentalPostService.GetById(id);
+            response.pictures = _pictruetService.GetPicturesByProductId(entity.Id).ToList();
+            if(entity.ProvincialId != 0)
+            {
+                response.ProvincialName=_territoriesServices.GetById(entity.ProvincialId)?.Name;
+            }
+            if(entity.DistrictId != 0)
+            {
+                response.DistrictName=_territoriesServices.GetById(entity.DistrictId)?.Name;
+            }
+            if(entity.WardId != 0)
+            {
+                response.WardName=_territoriesServices.GetById(entity.WardId)?.Name;
+            }
+            response.Post = entity;
+            response.utilitiesRooms = _rentalPostService.GetUtilitiesOfPost(entity.Id).ToList();
+            return response;
         }
 
         // POST api/<PostRentalController>
         [HttpPost]
-        public IActionResult Post([FromBody] PostModel model)
+        public IActionResult Post([FromBody]PostModel model)
         {
             ResponsePostRental response = new ResponsePostRental();
             try
             {
-                RentalPost rentalPost = new RentalPost();
-                StatusPost statusPost = (StatusPost)model.Status;
-                switch (statusPost)
+                RentalPost entity = new RentalPost();
+                 entity  = model.ConvertSetp(entity);
+                _rentalPostService.InsertPost(entity);
+                if(model.PictureIds != null)
                 {
-                    case StatusPost.Setp1:
-                        rentalPost = model.ConvertSetp(rentalPost);
-                        _rentalPostService.InsertPost(rentalPost);
-                        break;
-                    default:
-                        rentalPost = null;
-                        break;
+                    _rentalPostService.InsertPicturesForPost(model.PictureIds,entity.Id);
+                    
+                }
+                if(model.UtilitiesIds != null)
+                {
+                    _rentalPostService.InsertUtilitiesForPost(model.UtilitiesIds,entity.Id);
+                    
                 }
                 response = ResponseMessage(StatusPost.Susscess);
                 return Ok(response);
@@ -84,7 +128,7 @@ namespace Motel.Api.Services.Controllers
         public IActionResult Put(int id, [FromBody]PostModel model)
         {
             ResponsePostRental response = new ResponsePostRental();
-            StatusPost statusPost = (StatusPost)model.Status;
+            StatusPost statusPost = (StatusPost)1;
             if(model == null && model?.Status == null)
             {
                 response= ResponseMessage(statusPost);

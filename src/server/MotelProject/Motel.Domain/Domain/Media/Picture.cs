@@ -1,4 +1,6 @@
-﻿using Motel.Core;
+﻿using LinqToDB.Mapping;
+using Motel.Core;
+using Motel.Domain.Domain.Post;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,5 +38,9 @@ namespace Motel.Domain.Domain.Media
         /// Gets or sets the picture virtual path
         /// </summary>
         public string VirtualPath { get; set; }
+
+          [Association(ThisKey="Id", OtherKey="PictureId")]
+        public virtual ICollection<PostPictureMaping> PostPictures { get; set; }
+
     }
 }

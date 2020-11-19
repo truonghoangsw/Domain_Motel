@@ -13,6 +13,7 @@ namespace Motel.Services.Territories
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using  Motel.Domain.Domain.Territories;
 
     public class TerritoriesServices : ITerritoriesServices
     {
@@ -75,6 +76,12 @@ namespace Motel.Services.Territories
         {
             var key = _cacheKeyService.PrepareKeyForDefaultCache(TerritoriesDefaults.TerritoriesAllCacheKey);
             return _staticCacheManager.Get(key,() => GetAllFilter().ToList() ) ;
+        }
+
+        public IList<Territories> GetAllByName(string nameAdrress)
+        {
+            var query = _territoriesRepository.Table.Where(x=>nameAdrress.Contains(x.Name));
+            return query.ToList();
         }
 
         public IPagedList<Territories> GetAllFilter( bool? OrderIndex =null,int? StatusId = null,

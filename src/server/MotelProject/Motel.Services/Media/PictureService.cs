@@ -162,11 +162,12 @@ namespace Motel.Services.Media
         /// <param name="pictureId">Picture identifier</param>
         /// <param name="pictureBinary">Picture binary</param>
         /// <param name="mimeType">MIME type</param>
-        protected virtual void SavePictureInFile(int pictureId, byte[] pictureBinary, string mimeType)
+        protected virtual string SavePictureInFile(int pictureId, byte[] pictureBinary, string mimeType)
         {
             var lastPart = GetFileExtensionFromMimeType(mimeType);
             var fileName = $"{pictureId:0000000}_0.{lastPart}";
             _fileProvider.WriteAllBytes(GetPictureLocalPath(fileName), pictureBinary);
+            return fileName;
         }
 
         /// <summary>
@@ -759,11 +760,16 @@ namespace Motel.Services.Media
                 TitleAttribute = titleAttribute,
                 IsNew = isNew
             };
+            if (!StoreInDb)
+            {
+                int guildId = CommonHelper.GenerateRandomInteger();
+                picture.SeoFilename = SavePictureInFile(guildId, pictureBinary, mimeType);
+            }    
             _pictureRepository.Insert(picture);
             UpdatePictureBinary(picture, StoreInDb ? pictureBinary : Array.Empty<byte>());
 
-            if (!StoreInDb)
-                SavePictureInFile(picture.Id, pictureBinary, mimeType);
+           
+                
 
             //event notification
             _eventPublisher.EntityInserted(picture);
@@ -808,8 +814,6 @@ namespace Motel.Services.Media
             if (!string.IsNullOrEmpty(fileExtension))
                 fileExtension = fileExtension.ToLowerInvariant();
 
-            if (imgExt.All(ext => !ext.Equals(fileExtension, StringComparison.CurrentCultureIgnoreCase)))
-                return null;
 
             //contentType is not always available 
             //that's why we manually update it here

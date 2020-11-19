@@ -1,23 +1,21 @@
-﻿using Motel.Core;
-using Motel.Core.Caching;
-using Motel.Domain;
-using Motel.Domain.ContextDataBase;
-using Motel.Domain.Domain.Auth;
-using Motel.Domain.Domain.Media;
-using Motel.Domain.Domain.Post;
-using Motel.Services.Caching;
-using Motel.Services.Events;
-using Motel.Services.Logging;
-using Motel.Services.Media;
-using Motel.Services.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-
-namespace Motel.Services.RentalPosting
+﻿namespace Motel.Services.RentalPosting
 {
+    using Motel.Core.Caching;
+    using Motel.Domain;
+    using Motel.Domain.ContextDataBase;
+    using Motel.Domain.Domain.Post;
+    using Motel.Services.Caching;
+    using Motel.Services.Events;
+    using Motel.Services.Logging;
+    using Motel.Services.Security;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Motel.Domain.Domain.Territories;
+    using Motel.Services.Territories;
+    using Motel.Domain.Domain.Media;
+    using Motel.Domain.Domain.UtilitiesRoom;
+
     public class RentalPostService : IRentalPostService
     {
         #region Fields
@@ -26,11 +24,14 @@ namespace Motel.Services.RentalPosting
         protected readonly IEventPublisher _eventPublisher;
         protected readonly IRepository<PostComment> _postCommentRepository;
         protected readonly IRepository<PostPictureMaping> _postPictureRepository;
+        protected readonly ITerritoriesServices _territoriesServices;
         protected readonly IRepository<UtilitiesPostRental> _utilitiesPostRentalRepository;
         protected readonly IPermissionService permission;
         protected readonly ILogger _logger;
+        protected readonly IRepository<UtilitiesRoom> _utilitiesRoomRepository;
         protected readonly IRepository<RentalPost> _rentalPostRepository;
         protected readonly IStaticCacheManager _staticCacheManager;
+        protected readonly IRepository<Picture>_pictureRepository;
         protected readonly IWorkContext _workContext;
 
 
@@ -40,14 +41,20 @@ namespace Motel.Services.RentalPosting
         public RentalPostService(ICacheKeyService cacheKeyService,IEventPublisher eventPublisher,IWorkContext workContext,
             IRepository<UtilitiesPostRental> utilitiesPostRentalRepository
             ,IRepository<PostPictureMaping> postPictureRepository,
+            ITerritoriesServices territoriesServices,
+            IRepository<UtilitiesRoom> utilitiesRoomRepository,
             IRepository<PostComment> postCommentRepository, 
+            IRepository<Picture> pictureRepository,
             IRepository<RentalPost> rentalPostRepository
             ,IStaticCacheManager staticCacheManager,ILogger logger)
         {
+            _pictureRepository=pictureRepository;
+            _territoriesServices= territoriesServices;
             _logger = logger;
             _utilitiesPostRentalRepository = utilitiesPostRentalRepository;
             _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
+            _utilitiesRoomRepository = utilitiesRoomRepository;
             _postCommentRepository = postCommentRepository;
             _rentalPostRepository = rentalPostRepository;
             _staticCacheManager = staticCacheManager;
@@ -57,14 +64,38 @@ namespace Motel.Services.RentalPosting
         #endregion
 
         #region Post Rentel
+
         public RentalPost GetById(int Id)
         {
             return _rentalPostRepository.GetById(Id);
         }
 
+        public IEnumerable<RentalPost> GetList(string titlePost, int? toMonthlyPrice, int? fromMonthlyPrice, 
+            int? numberRoom, string address, int? PageIndex=0, int? PageSize=int.MaxValue)
+        {
+          
+            var query = _rentalPostRepository.Table;
+            if(!string.IsNullOrEmpty(titlePost))
+                query = query.Where(x=>titlePost.Contains(x.TitlePost));
+            if(toMonthlyPrice.HasValue)
+                query  = query.Where(x=>x.MonthlyPrice <= toMonthlyPrice);
+            if(fromMonthlyPrice.HasValue)
+                query  = query.Where(x=>x.MonthlyPrice >= fromMonthlyPrice);
+            if(!string.IsNullOrEmpty(titlePost))
+            {
+                var lstTerritories = _territoriesServices.GetAllByName(address);
+                query  = query.Where(x=>lstTerritories.Where(y=>(y.Id == x.WardId) || (y.Id == x.ProvincialId) || (y.Id == x.DistrictId)).Count() > 0);
+            }
+           return query;
+        }
+        public IEnumerable<RentalPost> GetListOfLester(int lesterId, int? PageIndex=0, int? PageSize = int.MaxValue)
+        {
+            var query = _rentalPostRepository.Table.Where(x=>x.LesterId == lesterId);
+            query = query.Take(PageSize.Value).Skip(PageSize.Value*PageIndex.Value);
+            return query.ToList();
+        }
         public void InsertPost(RentalPost post)
         {
-            post.LesterId = 15;
             post.CreateDate =DateTime.Now;
             post.UpdateDate =DateTime.Now;
             _rentalPostRepository.Insert(post);
@@ -103,6 +134,7 @@ namespace Motel.Services.RentalPosting
             lstPicture.ForEach(picture=> _postPictureRepository.Delete(picture));
         }
         #endregion
+
         #region Post Utilities
         public void InsertUtilitieForPost(int UtilitieId, int PostId)
         {
@@ -129,6 +161,24 @@ namespace Motel.Services.RentalPosting
              var lstUtilities = _utilitiesPostRentalRepository.Table.Where(x=>x.PostRental == postId).ToList();
             lstUtilities.ForEach(utilitie=> _utilitiesPostRentalRepository.Delete(lstUtilities));
         }
+
+        public IList<Picture> GetImageOfPost(int PostId)
+        {
+            var query = from pm in _postPictureRepository.Table join pt in  _pictureRepository.Table
+                        on pm.PictureId equals pt.Id where pm.PostId ==PostId select pt;
+            return query.ToList();
+        }
+
+        public IList<UtilitiesRoom> GetUtilitiesOfPost(int PostId)
+        {
+             var query = from ut in _utilitiesPostRentalRepository.Table join ur in  _utilitiesRoomRepository.Table
+                        on ut.UtilitiesId equals  ur.Id where ut.PostRental ==PostId select ur;
+            return query.ToList();
+        }
+
+
+
+
         #endregion
 
 

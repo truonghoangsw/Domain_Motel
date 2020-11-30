@@ -67,8 +67,10 @@ namespace Motel.Services.Security
                          ur in _repositoryRoles.Table on urm.RoleID equals ur.Id
                          where urm.UserID == userId
                          select ur.Name;
-
-            return _staticCache.Get(key,()=> query.ToList());
+            //if(query.Count() == 0)
+            //    return null;
+            //return _staticCache.Get(key,()=> query.ToList());
+            return query.ToList();
         }
 
         public IList<Auth_Assign> GetPermissonOfRole(int roleId)

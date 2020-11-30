@@ -8,7 +8,7 @@ namespace Motel.Services.Lester
     public interface ILesterServices
     {
         #region Lester Services
-
+        Lesters GetByUserId(int Id);
         #endregion
     }
 }

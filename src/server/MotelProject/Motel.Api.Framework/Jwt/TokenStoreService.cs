@@ -58,7 +58,7 @@ namespace Motel.Api.Framework.Jwt
 
         public void AddUserToken(Auth_User user, string refreshTokenSerial, string accessToken, string refreshTokenSourceSerial)
         {
-            var now = DateTimeOffset.UtcNow;
+            var now = DateTime.UtcNow;
             var token = new Auth_UserToken
             {
                 UserId = user.Id,
@@ -128,8 +128,8 @@ namespace Motel.Api.Framework.Jwt
         public bool IsValidToken(string accessToken, int userId)
         {
             var accessTokenHash = _encryptionService.GetSha256Hash(accessToken);
-            var userToken =  _tokenUserRepository.Table.FirstOrDefault(x=>x.AccessTokenHash == accessToken && x.UserId == userId);
-             return userToken?.AccessTokenExpiresDateTime >= DateTimeOffset.UtcNow;
+            var userToken =  _tokenUserRepository.Table.FirstOrDefault(x=>x.AccessTokenHash == accessTokenHash && x.UserId == userId);
+             return userToken?.AccessTokenExpiresDateTime >= DateTime.UtcNow;
         }
 
         public void RevokeUserBearerTokens(string userIdValue, string refreshTokenValue)

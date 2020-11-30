@@ -76,15 +76,15 @@
           
             var query = _rentalPostRepository.Table;
             if(!string.IsNullOrEmpty(titlePost))
-                query = query.Where(x=>titlePost.Contains(x.TitlePost));
+                query = query.Where(x=>x.TitlePost.Contains(titlePost));
             if(toMonthlyPrice.HasValue)
                 query  = query.Where(x=>x.MonthlyPrice <= toMonthlyPrice);
             if(fromMonthlyPrice.HasValue)
                 query  = query.Where(x=>x.MonthlyPrice >= fromMonthlyPrice);
-            if(!string.IsNullOrEmpty(titlePost))
+            if(!string.IsNullOrEmpty(address))
             {
                 var lstTerritories = _territoriesServices.GetAllByName(address);
-                query  = query.Where(x=>lstTerritories.Where(y=>(y.Id == x.WardId) || (y.Id == x.ProvincialId) || (y.Id == x.DistrictId)).Count() > 0);
+                query  = query.Where(x=>x.AddressDetail.ToLower().Contains(address.ToLower()));
             }
            return query;
         }
@@ -171,17 +171,20 @@
 
         public IList<UtilitiesRoom> GetUtilitiesOfPost(int PostId)
         {
-             var query = from ut in _utilitiesPostRentalRepository.Table join ur in  _utilitiesRoomRepository.Table
+            var query = from ut in _utilitiesPostRentalRepository.Table join ur in  _utilitiesRoomRepository.Table
                         on ut.UtilitiesId equals  ur.Id where ut.PostRental ==PostId select ur;
             return query.ToList();
+        }
+
+        public IList<RentalPost> GetListOfCategory(int categoryId)
+        {
+            throw new NotImplementedException();
         }
 
 
 
 
         #endregion
-
-
 
     }
 }

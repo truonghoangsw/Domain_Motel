@@ -110,16 +110,12 @@ namespace Motel.Services.Security
                 return false;
 
             var key = _cacheKeyService.PrepareKeyForDefaultCache(MotelSecurityDefaults.PermissionsAllowedCacheKey , objectType,userRoleId);
-            
-            return _staticCacheManager.Get(key, () =>
-            {
-                var permissions = GetPermissionRecordsByUserRoleId(userRoleId,objectType);
-                foreach (var permission in permissions)
-                    if (permission.Permission.Equals(auth_PermissionSystemName, StringComparison.InvariantCultureIgnoreCase))
+            var permissions = _staticCacheManager.Get(key, () =>GetPermissionRecordsByUserRoleId(userRoleId,objectType));
+            foreach (var permission in permissions)
+                    if (permission.Permission.ToLower().Trim() == auth_PermissionSystemName.ToLower().Trim())
                         return true;
 
                 return false;
-            });
         }
 
         public void DeleteAuth_Permission(Auth_Permission permission)

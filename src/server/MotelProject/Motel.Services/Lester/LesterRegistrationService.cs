@@ -94,19 +94,28 @@ namespace Motel.Services.Lester
                 result.MessageCode = MessgeCodeRegistration.IsDeleted;
                 return result;
             }
+            result.User = user;
             return result;
         }
         Auth_User CreateUserForLester(RegistrationLesterRequest lesterModel,string passwordHash)
         {
             var userNew = new Auth_User()
             {
-                UserName = lesterModel.UserName,
                 CreatedTime =DateTime.Now,
                 PasswordHash = passwordHash,
                 Email =lesterModel.Email,
                 PhoneNumber = lesterModel.PhoneNumber,
                 Status = (int)EnumStatusUser.Approved,
             };
+            if (string.IsNullOrEmpty(lesterModel.Email))
+            {
+                userNew.UserName  = lesterModel.PhoneNumber;
+            }
+            else
+            {
+                 userNew.UserName  = lesterModel.Email.Split('@').First();;
+            }
+           
             return _userService.InsertUserLester(userNew);
         }
         CustomPrincipal GetInforAuthorize(Auth_User user)
@@ -122,13 +131,14 @@ namespace Motel.Services.Lester
 
             return customPrincipal;
         }
-        (string salt,string passwordHash) CreatePassswordHash(string password)
+        (string salt,string passwordHash) CreatePassswordHash(string password,string salt="")
         {
             string _passwordHash;
-            var saltKey = _encryptionService.CreateSaltKey(MotelUserServicesDefaults.PasswordSaltKeySize);
-            string _salt = saltKey;
+             var saltKey = salt;
+            if(salt == "")
+                saltKey = _encryptionService.CreateSaltKey(MotelUserServicesDefaults.PasswordSaltKeySize);
             _passwordHash = _encryptionService.CreatePasswordHash(password, saltKey, MotelUserServicesDefaults.DefaultHashedPasswordFormat);
-            return (_salt,_passwordHash);
+            return (saltKey,_passwordHash);
         }
         LoginResutls LoginFacebook(Lesters lesters)
         {
@@ -192,12 +202,15 @@ namespace Motel.Services.Lester
             var valResutls = IsValiLogin(userName);
             if(valResutls.MessageCode != MessgeCodeRegistration.IsValidate)
                 return valResutls;
-            (string salt, string passwordHash) = CreatePassswordHash(password);
-            if(valResutls.User.PasswordHash != password)
+            var lester = _lestersRepository.Table.FirstOrDefault(x=>x.UserId == valResutls.User.Id);
+            (string Salt, string passwordHash) = CreatePassswordHash(password,lester.Salt);
+            if(valResutls.User.PasswordHash != passwordHash)
             {
                 valResutls.MessageCode = MessgeCodeRegistration.PasswordWrong;
             }
             loginResutls.customPrincipal =  GetInforAuthorize(valResutls.User);
+            loginResutls.User = valResutls.User;
+            loginResutls.MessageCode = MessgeCodeRegistration.Suscess;
             return loginResutls;
         }
 

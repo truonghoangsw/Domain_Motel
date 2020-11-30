@@ -26,7 +26,11 @@ namespace Motel.Services.RentalPosting
         void InsertUtilitieForPost(int UtilitieId,int PostId);
         void InsertUtilitiesForPost(int[] UtilitieIds,int PostId);
         void DeleteUtilitiesOfPost(int postId);
-          IList<UtilitiesRoom> GetUtilitiesOfPost(int Post);
+        IList<UtilitiesRoom> GetUtilitiesOfPost(int Post);
+        #endregion
+
+        #region Post_Rental_Posting
+        IList<RentalPost> GetListOfCategory(int categoryId);
         #endregion
     }
 }

@@ -316,7 +316,10 @@ namespace Motel.Services.Security
             var pObjectType =  SqlParameterHelper.GetInt32Parameter("@_ObjectType",(int)ObjectTypeEnum.User);
             var pUserId=  SqlParameterHelper.GetInt32Parameter("@_Id", Id);
              var permission = _permissionAssign.EntityFromSql("GetAllPermissonOfUser",pObjectType,pUserId);
-            return _staticCacheManager.Get(key,() => permission);
+            //if(permission.Count > 0)
+            //    return null;
+            //return _staticCacheManager.Get(key,() => permission);
+            return permission;
         }
         public IList<Auth_Assign> GetAllPermissonOfUser(Auth_User user)
         {

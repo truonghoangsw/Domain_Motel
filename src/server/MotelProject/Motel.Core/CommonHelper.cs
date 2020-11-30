@@ -1,4 +1,5 @@
-﻿using Motel.Core.Infrastructure;
+﻿using Microsoft.AspNetCore.Routing;
+using Motel.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,6 +28,28 @@ namespace Motel.Core
         #endregion
 
         #region Methods
+        public static string[]  GenericPermissonOfControler(RouteValueDictionary routeValue)
+        {
+            
+            object valueOfAction,valueOfController = "";
+
+            if(!routeValue.TryGetValue("action",out valueOfAction))
+            {
+                return null;
+            }
+            if(!routeValue.TryGetValue("controller",out valueOfController))
+            {
+                return null;
+            }
+            string ActionPermisson = valueOfController?.ToString() + ":" + valueOfAction?.ToString();
+            string ControllerPermisson = valueOfController?.ToString() + ":*";
+           
+            return new string[]
+            {
+                ActionPermisson,
+                ControllerPermisson
+            };
+        }
         public static DateTime DateTimeDefault()
         {
             return new DateTime(1990,01,01);

@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
 using Motel.Api.Framework;
+using Motel.Api.Framework.AuthMiddleware;
 using Motel.Api.Framework.Jwt;
 using Motel.Core;
 using Motel.Core.Caching;
@@ -69,11 +71,13 @@ namespace Motel.Api.Infrastructure
             #endregion
 
             #region Auth
+            builder.RegisterType<TokenValidatorService>().As<ITokenValidatorService>().InstancePerLifetimeScope();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
             builder.RegisterType<PermissionService>().As<IPermissionService>().InstancePerLifetimeScope();
             builder.RegisterType<RolesUserServices>().As<IRolesUserServices>().InstancePerLifetimeScope();
             builder.RegisterType<CookieAuthenticationService>().As<IAuthenticationService>().InstancePerLifetimeScope();
             builder.RegisterType<EncryptionService>().As<IEncryptionService>().InstancePerLifetimeScope();
+            builder.RegisterType<AntiForgeryCookieService>().As<IAntiForgeryCookieService>().InstancePerLifetimeScope();
             #endregion
              
             #region Lester
@@ -90,6 +94,7 @@ namespace Motel.Api.Infrastructure
             builder.RegisterType<TerritoriesServices>().As<ITerritoriesServices>().InstancePerDependency();
              builder.RegisterType<UtilitiesRoomServices>().As<IUtilitiesRoomServices>().InstancePerDependency();
             #endregion
+
 
             #region Cache and event
             builder.RegisterType<EventPublisher>().As<IEventPublisher>().InstancePerDependency();
@@ -190,7 +195,7 @@ namespace Motel.Api.Infrastructure
                 .CreateRegistration();
         }
         public IEnumerable<IComponentRegistration> RegistrationsFor(Service service, Func<Service, IEnumerable<ServiceRegistration>> registrationAccessor)
-        {
+         {
             var ts = service as TypedService;
             if (ts != null && typeof(ISettings).IsAssignableFrom(ts.ServiceType))
             {

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Motel.Api.Framework;
+using Motel.Api.Framework.Middleware;
 using Motel.Api.Framework.Request;
 using Motel.Api.Framework.Response;
 using Motel.Core;
 using Motel.Core.Enum;
 using Motel.Domain.Domain.Post;
+using Motel.Services.Lester;
 using Motel.Services.Logging;
 using Motel.Services.Media;
 using Motel.Services.RentalPosting;
@@ -19,18 +22,26 @@ namespace Motel.Api.Services.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AuthorizationCustomFilter]
     public class PostRentalController : ControllerBase
     {
         #region Fields
         private IRentalPostService _rentalPostService { get; set;}
+        private ILesterServices _lesterServices { get; set;}
         private ITerritoriesServices _territoriesServices { get; set;}
          private IPictureService _pictruetService { get; set;}
         private ILogger _logger { get; set;}
         #endregion
 
         #region Ctor
-        public PostRentalController(IRentalPostService rentalPostService, ITerritoriesServices territoriesServices, IPictureService pictruetService, ILogger logger)
+        public PostRentalController(
+            IRentalPostService rentalPostService, 
+            ITerritoriesServices territoriesServices, 
+            IPictureService pictruetService,
+            ILesterServices lesterServices,
+            ILogger logger)
         {
+            _lesterServices = lesterServices;
             _rentalPostService = rentalPostService;
             _territoriesServices = territoriesServices;
             _pictruetService = pictruetService;
@@ -99,8 +110,22 @@ namespace Motel.Api.Services.Controllers
             try
             {
                 RentalPost entity = new RentalPost();
-                 entity  = model.ConvertSetp(entity);
+                entity  = model.ConvertSetp(entity);
+                var provincial = _territoriesServices.GetById(entity.ProvincialId);
+                var Ward = _territoriesServices.GetById(entity.WardId);
+                var District = _territoriesServices.GetById(entity.DistrictId);
+                string addressDeatail = string.Format("{0} , {1} , {2} , {3}",entity.AddressDetail,provincial == null ? "": provincial.Name,District == null ? "": District.Name,Ward == null ? "": Ward.Name);
+                entity.AddressDetail = addressDeatail;
+                var lester =   _lesterServices.GetByUserId(AccessControl.User.Id);
+                if(lester == null)
+                {
+                   response = ResponseMessage(StatusPost.Error);
+                   return BadRequest(response);
+                }
+                entity.CreateBy = lester.Id;
+                entity.LesterId = lester.Id;
                 _rentalPostService.InsertPost(entity);
+              
                 if(model.PictureIds != null)
                 {
                     _rentalPostService.InsertPicturesForPost(model.PictureIds,entity.Id);
@@ -109,7 +134,6 @@ namespace Motel.Api.Services.Controllers
                 if(model.UtilitiesIds != null)
                 {
                     _rentalPostService.InsertUtilitiesForPost(model.UtilitiesIds,entity.Id);
-                    
                 }
                 response = ResponseMessage(StatusPost.Susscess);
                 return Ok(response);

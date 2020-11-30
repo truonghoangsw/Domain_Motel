@@ -56,12 +56,14 @@ namespace Motel.Api.Framework.Jwt
                 new Claim(ClaimTypes.Name, user.UserName, ClaimValueTypes.String, _configuration.Value.Issuer),
                 new Claim(ClaimTypes.Email, user.Email?.ToString(), ClaimValueTypes.String, _configuration.Value.Issuer),
                 // to invalidate the cookie
+                 new Claim(ClaimTypes.SerialNumber, user.Id.ToString(), ClaimValueTypes.String, _configuration.Value.Issuer),
                 // custom data
                 new Claim(ClaimTypes.UserData, user.Id.ToString(), ClaimValueTypes.String, _configuration.Value.Issuer)
             };
 
             // add roles
             var roleNames =  _rolesUserServices.GetNameRoles(user.Id);
+
             foreach (var name in roleNames)
             {
                 claims.Add(new Claim(ClaimTypes.Role, name, ClaimValueTypes.String, _configuration.Value.Issuer));

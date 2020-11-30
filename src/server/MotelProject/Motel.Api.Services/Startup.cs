@@ -54,18 +54,19 @@ namespace Motel.Api
                 app.UseDeveloperExceptionPage();
             }
             app.UseDeveloperExceptionPage();
-            app.ConfigureRequestPipeline();
+
+          
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Motel API");
             });
-             app.UseStaticFiles();
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseStaticFiles();
+          
+            app.ConfigureRequestPipeline();
+
+
         }
     }
 }

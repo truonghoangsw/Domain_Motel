@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 namespace Motel.Domain.Domain.Post
 {
-	using Motel.Domain.Domain.UtilitiesRoom;
+    using LinqToDB.Mapping;
+    using Motel.Domain.Domain.UtilitiesRoom;
     public class RentalPost:BaseEntity
     {
 		public string TitlePost {get;set;}
@@ -15,6 +16,8 @@ namespace Motel.Domain.Domain.Post
 		public DateTime CreateDate {get;set;}
 		public int CreateBy {get;set;}
 		public DateTime UpdateDate {get;set;} = CommonHelper.DateTimeDefault();
+		[Column]
+
 		public byte Status {get;set;}
 		public int TerritoriesId {get;set;}
 		public int LesterId {get;set;}

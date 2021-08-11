@@ -81,8 +81,8 @@ namespace Motel.Api.Infrastructure
             #endregion
              
             #region Lester
+            builder.RegisterType<LesterServices>().As<ILesterServices>().InstancePerLifetimeScope();
             builder.RegisterType<LesterRegistrationService>().As<ILesterRegistrationService>().InstancePerLifetimeScope();
-
             builder.RegisterType<TokenStoreService>().As<ITokenStoreService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenFactoryService>().As<ITokenFactoryService>().InstancePerLifetimeScope();
             #endregion

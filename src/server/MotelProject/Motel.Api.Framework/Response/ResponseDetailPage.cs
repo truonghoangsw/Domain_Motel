@@ -14,7 +14,8 @@ namespace Motel.Api.Framework.Response
             Post = new RentalPost();
             pictures = new List<Picture>();
         }
-        public RentalPost Post { get; set;}
+        public RentalPost Post { get; set; }
+        public Category Category { get ;set;}
 
         public string WardName {get;set;}
 		public string ProvincialName {get;set;}

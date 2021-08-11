@@ -25,6 +25,7 @@ namespace Motel.Services.Security
         private readonly IRepository<Auth_User> _userRepository;
         private readonly IRolesUserServices _rolesServices;
         private readonly IRepository<Auth_UserRoles> _userRolesMappingRepository;
+         private readonly IRepository<Auth_Roles> _rolesRepository;
         private readonly IRepository<Auth_Assign> _permissionAssign;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IMotelDataProvider _dataProvider;
@@ -35,6 +36,7 @@ namespace Motel.Services.Security
         public UserService(CachingSettings cachingSettings,
             UserSettings userSettings,
             ICacheKeyService cacheKeyService,
+             IRepository<Auth_Roles> rolesRepository,
             IRepository<Auth_Assign> permissionAssign,
             IEventPublisher eventPublisher,
             IRolesUserServices rolesServices,
@@ -43,6 +45,7 @@ namespace Motel.Services.Security
             IStaticCacheManager staticCacheManager,
             ILogger logger,IMotelDataProvider dataProvider)
         {
+            _rolesRepository =rolesRepository ; 
             _cachingSettings = cachingSettings;
             _userSettings = userSettings;
             _cacheKeyService = cacheKeyService;
@@ -240,7 +243,7 @@ namespace Motel.Services.Security
 
 
         #region User roles
-        public IList<Auth_UserRoles> GetUserRoles(Auth_User user, bool showHidden = false)
+        public IList<Auth_Roles> GetUserRoles(Auth_User user, bool showHidden = false)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
@@ -248,9 +251,9 @@ namespace Motel.Services.Security
             {
                 var key = _cacheKeyService.PrepareKeyForShortTermCache(MotelUserServicesDefaults.UserRolesByObjectCacheKey, user);
 
-                var query = from ur in  _userRolesMappingRepository.Table join urm in _userRolesMappingRepository.Table
-                            on ur.Id equals  urm.RoleID
-                            where urm.RoleID == user.Id
+                var query = from urm in  _userRolesMappingRepository.Table join ur in _rolesRepository.Table
+                            on urm.RoleID equals  ur.Id
+                            where urm.UserID == user.Id
                             orderby ur.Id
                             select ur;
                 return _staticCacheManager.Get(key, () => query.ToList());

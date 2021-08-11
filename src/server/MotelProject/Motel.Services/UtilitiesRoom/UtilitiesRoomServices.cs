@@ -6,6 +6,7 @@
     using Motel.Domain.ContextDataBase;
     using System.Linq;
     using System.Collections.Generic;
+    using Motel.Domain.Domain.Post;
 
     public class UtilitiesRoomServices : IUtilitiesRoomServices
     {
@@ -20,5 +21,7 @@
         {
             return _utilitiesRoomRepository.Table.ToList();
         }
+
+       
     }
 }

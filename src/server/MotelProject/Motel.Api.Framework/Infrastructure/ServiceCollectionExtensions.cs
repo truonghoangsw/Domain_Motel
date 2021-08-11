@@ -26,7 +26,7 @@ namespace Motel.Api.Infrastructure
         public static (IEngine, MotelConfig) ConfigureApplicationServices(this IServiceCollection services,
             IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
-             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             var motelConfig = services.ConfigureStartupConfig<MotelConfig>(configuration.GetSection("Motel"));
             services.ConfigureStartupConfig<HostingConfig>(configuration.GetSection("Hosting"));
 

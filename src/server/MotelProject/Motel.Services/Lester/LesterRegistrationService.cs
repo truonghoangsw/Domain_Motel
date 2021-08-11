@@ -107,15 +107,18 @@ namespace Motel.Services.Lester
                 PhoneNumber = lesterModel.PhoneNumber,
                 Status = (int)EnumStatusUser.Approved,
             };
-            if (string.IsNullOrEmpty(lesterModel.Email))
+            if (!string.IsNullOrEmpty(lesterModel.Email))
             {
-                userNew.UserName  = lesterModel.PhoneNumber;
+                userNew.UserName  = lesterModel.Email;
+            }
+            else if(!string.IsNullOrEmpty(lesterModel.PhoneNumber))
+            {
+                 userNew.UserName  = lesterModel.PhoneNumber.Split('@').First();;
             }
             else
             {
-                 userNew.UserName  = lesterModel.Email.Split('@').First();;
+                userNew.UserName = lesterModel.FacebookId;
             }
-           
             return _userService.InsertUserLester(userNew);
         }
         CustomPrincipal GetInforAuthorize(Auth_User user)

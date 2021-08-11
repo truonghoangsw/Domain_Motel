@@ -12,12 +12,6 @@ namespace Motel.Core.Enum
         Cancel = 2,
         [Description("Khóa")]
         Block = 3,
-        [Description("Bước 1")]
-        Setp1 = 11,
-        [Description("Bước 2")]
-        Setp2 = 12,
-        [Description("Bước 3")]
-        Setp3 = 13,
         [Description("Bước 4")]
         Setp4 = 14,
         [Description("Xóa")]

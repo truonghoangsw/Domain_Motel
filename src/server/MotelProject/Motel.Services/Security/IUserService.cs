@@ -9,7 +9,7 @@ namespace Motel.Services.Security
     public interface IUserService
     {
         #region User Roles
-        IList<Auth_UserRoles> GetUserRoles(Auth_User user, bool showHidden = false);
+        IList<Auth_Roles> GetUserRoles(Auth_User user, bool showHidden = false);
 
         int[] GetCustomerRoleIds(Auth_User user, bool showHidden = false);
 

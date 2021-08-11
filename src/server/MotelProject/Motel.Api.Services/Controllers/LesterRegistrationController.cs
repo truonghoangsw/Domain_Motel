@@ -21,7 +21,6 @@ namespace Motel.Api.Services.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AuthorizationCustomFilter]
     public class LesterRegistrationController : ControllerBase
     {
         #region Fields
@@ -54,13 +53,6 @@ namespace Motel.Api.Services.Controllers
         }
         #endregion
         // GET: api/<LesterRegistrationController>
-        [HttpPost("[action]")]
-      
-        public IEnumerable<string> GetUser(int Id)
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/<LesterRegistrationController>/5
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]

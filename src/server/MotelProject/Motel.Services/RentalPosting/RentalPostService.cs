@@ -15,6 +15,7 @@
     using Motel.Services.Territories;
     using Motel.Domain.Domain.Media;
     using Motel.Domain.Domain.UtilitiesRoom;
+    using Motel.Core.Enum;
 
     public class RentalPostService : IRentalPostService
     {
@@ -33,7 +34,7 @@
         protected readonly IStaticCacheManager _staticCacheManager;
         protected readonly IRepository<Picture>_pictureRepository;
         protected readonly IWorkContext _workContext;
-
+        private readonly IRepository<UtilitiesPostRental> _utilitiesMapRepository;
 
         #endregion
 
@@ -45,6 +46,7 @@
             IRepository<UtilitiesRoom> utilitiesRoomRepository,
             IRepository<PostComment> postCommentRepository, 
             IRepository<Picture> pictureRepository,
+            IRepository<UtilitiesPostRental> utilitiesMapRepository,
             IRepository<RentalPost> rentalPostRepository
             ,IStaticCacheManager staticCacheManager,ILogger logger)
         {
@@ -57,6 +59,8 @@
             _utilitiesRoomRepository = utilitiesRoomRepository;
             _postCommentRepository = postCommentRepository;
             _rentalPostRepository = rentalPostRepository;
+            _utilitiesMapRepository =utilitiesMapRepository;
+
             _staticCacheManager = staticCacheManager;
             _workContext = workContext;
             _postPictureRepository = postPictureRepository;
@@ -69,23 +73,42 @@
         {
             return _rentalPostRepository.GetById(Id);
         }
-
+         public IEnumerable<int> GetPostCotainerUtilities(int[] Id)
+        {
+            var query = from ur in _utilitiesRoomRepository.Table
+                        join urm in _utilitiesMapRepository.Table
+                        on ur.Id equals urm.UtilitiesId
+                        where Id.Contains(ur.Id)
+                        select urm.PostRental;
+            return query.ToList();
+        }
         public IEnumerable<RentalPost> GetList(string titlePost, int? toMonthlyPrice, int? fromMonthlyPrice, 
-            int? numberRoom, string address, int? PageIndex=0, int? PageSize=int.MaxValue)
+            int? numberRoom, string address, int? PageIndex=0, int? PageSize=int.MaxValue,int[] Category = null,int[] Utilities = null,int LesterId = 0)
         {
           
             var query = _rentalPostRepository.Table;
+            if(Category != null)
+                query = query.Where(x=>Category.Contains(x.CategoryId));
             if(!string.IsNullOrEmpty(titlePost))
                 query = query.Where(x=>x.TitlePost.Contains(titlePost));
             if(toMonthlyPrice.HasValue)
                 query  = query.Where(x=>x.MonthlyPrice <= toMonthlyPrice);
-            if(fromMonthlyPrice.HasValue)
+             if(fromMonthlyPrice.HasValue)
                 query  = query.Where(x=>x.MonthlyPrice >= fromMonthlyPrice);
+             if(LesterId != 0)
+                query  = query.Where(x=>x.LesterId == LesterId);
             if(!string.IsNullOrEmpty(address))
             {
                 var lstTerritories = _territoriesServices.GetAllByName(address);
                 query  = query.Where(x=>x.AddressDetail.ToLower().Contains(address.ToLower()));
             }
+            if(Utilities != null)
+            {
+                var lstPostId = GetPostCotainerUtilities(Utilities);
+                if(lstPostId?.Count() != null)
+                    query = query.Where(x=>lstPostId.Contains(x.Id));
+            }
+            query  = query.Where(x=>x.Status == (byte)StatusPost.Approved);
            return query;
         }
         public IEnumerable<RentalPost> GetListOfLester(int lesterId, int? PageIndex=0, int? PageSize = int.MaxValue)
@@ -98,22 +121,32 @@
         {
             post.CreateDate =DateTime.Now;
             post.UpdateDate =DateTime.Now;
+            post.Status =(byte)StatusPost.Approved;
             _rentalPostRepository.Insert(post);
         }
 
        
         public void UppdatePost(RentalPost post)
         {
-            post.UpdateDate =DateTime.Now;
-             _rentalPostRepository.Update(post);
+            try
+            {
+                 post.UpdateDate =DateTime.Now;
+                _rentalPostRepository.Update(post);
+            }
+            catch (Exception ex)
+            {
+                return ;
+            }
+           
         }
 
         #endregion
 
+           
         #region Post picture
         public void InsertPictureForPost(int PictureId, int PostId)
         {
-            PostPictureMaping pictureMaping = new PostPictureMaping()
+             PostPictureMaping pictureMaping = new PostPictureMaping()
             {
                 PictureId = PictureId,
                 PostId = PostId,

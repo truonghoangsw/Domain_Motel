@@ -9,7 +9,7 @@ namespace Motel.Services.RentalPosting
     {
         #region Post
         IEnumerable<RentalPost>GetList(string titlePost, int? toMonthlyPrice, int? fromMonthlyPrice, 
-            int? numberRoom, string address, int? PageIndex=0, int? PageSize=int.MaxValue);
+            int? numberRoom, string address, int? PageIndex=0, int? PageSize=int.MaxValue,int[] Category = null,int[] Utilities = null,int LesterId = 0);
         IEnumerable<RentalPost> GetListOfLester(int lesterId, int? PageIndex=0, int? PageSize=int.MaxValue);
         RentalPost GetById(int Id);
         void InsertPost(RentalPost post);

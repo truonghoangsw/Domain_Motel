@@ -26,6 +26,7 @@ namespace Motel.Api.Services.Controllers
     public class PostRentalController : ControllerBase
     {
         #region Fields
+        private ICategoryService _categoryService { get; set;}
         private IRentalPostService _rentalPostService { get; set;}
         private ILesterServices _lesterServices { get; set;}
         private ITerritoriesServices _territoriesServices { get; set;}
@@ -38,9 +39,11 @@ namespace Motel.Api.Services.Controllers
             IRentalPostService rentalPostService, 
             ITerritoriesServices territoriesServices, 
             IPictureService pictruetService,
+             ICategoryService categoryService,
             ILesterServices lesterServices,
             ILogger logger)
         {
+            _categoryService = categoryService;
             _lesterServices = lesterServices;
             _rentalPostService = rentalPostService;
             _territoriesServices = territoriesServices;
@@ -63,7 +66,7 @@ namespace Motel.Api.Services.Controllers
                 }
                 var lst= _rentalPostService.GetList(filter.TitlePost,filter.ToMonthlyPrice,
                     filter.FromMonthlyPrice,filter.NumberRoom,filter.Address,
-                    filter.PageIndex,filter.PageSize).ToList();
+                    filter.PageIndex,filter.PageSize,filter.CatalogIds,filter.UtilitieIds).ToList();
                 lst.ForEach(x =>
                 {
                     x.UtilitiesRooms = _rentalPostService.GetUtilitiesOfPost(x.Id);
@@ -99,6 +102,7 @@ namespace Motel.Api.Services.Controllers
             }
             response.Post = entity;
             response.utilitiesRooms = _rentalPostService.GetUtilitiesOfPost(entity.Id).ToList();
+            response.Category = _categoryService.GetCategoryById(entity.CategoryId);
             return response;
         }
 
@@ -152,7 +156,7 @@ namespace Motel.Api.Services.Controllers
         public IActionResult Put(int id, [FromBody]PostModel model)
         {
             ResponsePostRental response = new ResponsePostRental();
-            StatusPost statusPost = (StatusPost)1;
+            StatusPost statusPost = (StatusPost)model.Status;
             if(model == null && model?.Status == null)
             {
                 response= ResponseMessage(statusPost);
@@ -165,28 +169,28 @@ namespace Motel.Api.Services.Controllers
                 switch (statusPost)
                 {
                     case StatusPost.Pending:
+                        rentalPost.Status = (byte)StatusPost.Pending;
+                        _rentalPostService.UppdatePost(rentalPost);
                         break;
                     case StatusPost.Approved:
+                         rentalPost.Status = (byte)StatusPost.Approved;
+                        _rentalPostService.UppdatePost(rentalPost);
                         break;
                     case StatusPost.Cancel:
+                        rentalPost.Status = (byte)StatusPost.Cancel;
+                        _rentalPostService.UppdatePost(rentalPost);
                         break;
-                    case StatusPost.Block:
-                        break;
-                    case StatusPost.Setp2:
-                        updatePost = model.ConvertSetp(rentalPost);
-                        _rentalPostService.UppdatePost(updatePost);
-                        break;
-                    case StatusPost.Setp3:
+                    case StatusPost.Setp4:
                         _rentalPostService.DeletePictureForPost(rentalPost.Id);
                         _rentalPostService.DeleteUtilitiesOfPost(rentalPost.Id);
                         _rentalPostService.InsertPicturesForPost(model.PictureIds,rentalPost.Id);
                         _rentalPostService.InsertUtilitiesForPost(model.UtilitiesIds,rentalPost.Id);
-                        break;
-                    case StatusPost.Setp4:
-                         updatePost = model.ConvertSetp(rentalPost);
+                        updatePost  = model.ConvertSetp(rentalPost);
                         _rentalPostService.UppdatePost(updatePost);
                         break;
                     case StatusPost.Delete:
+                        rentalPost.Status = (byte)StatusPost.Delete;
+                        _rentalPostService.UppdatePost(rentalPost);
                         break;
                     default:
                         break;
@@ -230,18 +234,6 @@ namespace Motel.Api.Services.Controllers
                     response.Message = CommonHelper.DescriptionEnum(StatusPost.Pending);
                     break;
                 case StatusPost.Block:
-                    response.MessageCode = (int)StatusPost.Pending;
-                    response.Message = CommonHelper.DescriptionEnum(StatusPost.Pending);
-                    break;
-                case StatusPost.Setp1:
-                    response.MessageCode = (int)StatusPost.Pending;
-                    response.Message = CommonHelper.DescriptionEnum(StatusPost.Pending);
-                    break;
-                case StatusPost.Setp2:
-                    response.MessageCode = (int)StatusPost.Pending;
-                    response.Message = CommonHelper.DescriptionEnum(StatusPost.Pending);
-                    break;
-                case StatusPost.Setp3:
                     response.MessageCode = (int)StatusPost.Pending;
                     response.Message = CommonHelper.DescriptionEnum(StatusPost.Pending);
                     break;

@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://192.168.162.54:8082/",
+      "applicationUrl": "http://192.168.43.224:8082/",
       "sslPort": 8082
     }
   },
